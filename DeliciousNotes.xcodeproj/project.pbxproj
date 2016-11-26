@@ -12,6 +12,16 @@
 		AE9FE69E1DE2584900A74DD8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE9FE69C1DE2584900A74DD8 /* Main.storyboard */; };
 		AE9FE6A01DE2584900A74DD8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE9FE69F1DE2584900A74DD8 /* Assets.xcassets */; };
 		AE9FE6A31DE2584900A74DD8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE9FE6A11DE2584900A74DD8 /* LaunchScreen.storyboard */; };
+		AE9FE6AB1DE2592000A74DD8 /* NetworkingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6AA1DE2592000A74DD8 /* NetworkingProtocol.swift */; };
+		AE9FE6AD1DE25EBE00A74DD8 /* YelpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6AC1DE25EBE00A74DD8 /* YelpService.swift */; };
+		AE9FE6B01DE2686700A74DD8 /* ParseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6AF1DE2686700A74DD8 /* ParseClient.swift */; };
+		AE9FE6B21DE26FA900A74DD8 /* ErrorEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6B11DE26FA900A74DD8 /* ErrorEnum.swift */; };
+		AE9FE6B41DE2724400A74DD8 /* YelpToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6B31DE2724400A74DD8 /* YelpToken.swift */; };
+		AE9FE6B61DE8BB4A00A74DD8 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6B51DE8BB4A00A74DD8 /* CoreDataStack.swift */; };
+		AE9FE6B91DE8BBD900A74DD8 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6B71DE8BBD900A74DD8 /* Model.xcdatamodeld */; };
+		AE9FE6BB1DE8C41D00A74DD8 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6BA1DE8C41D00A74DD8 /* Location.swift */; };
+		AE9FE6BD1DE8D09F00A74DD8 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6BC1DE8D09F00A74DD8 /* Category.swift */; };
+		AE9FE6BF1DE8D15D00A74DD8 /* Business.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6BE1DE8D15D00A74DD8 /* Business.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +32,16 @@
 		AE9FE69F1DE2584900A74DD8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AE9FE6A21DE2584900A74DD8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AE9FE6A41DE2584900A74DD8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AE9FE6AA1DE2592000A74DD8 /* NetworkingProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkingProtocol.swift; path = ../NetworkingProtocol.swift; sourceTree = "<group>"; };
+		AE9FE6AC1DE25EBE00A74DD8 /* YelpService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = YelpService.swift; path = ../YelpService.swift; sourceTree = "<group>"; };
+		AE9FE6AF1DE2686700A74DD8 /* ParseClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseClient.swift; sourceTree = "<group>"; };
+		AE9FE6B11DE26FA900A74DD8 /* ErrorEnum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorEnum.swift; sourceTree = "<group>"; };
+		AE9FE6B31DE2724400A74DD8 /* YelpToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpToken.swift; sourceTree = "<group>"; };
+		AE9FE6B51DE8BB4A00A74DD8 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		AE9FE6B81DE8BBD900A74DD8 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		AE9FE6BA1DE8C41D00A74DD8 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		AE9FE6BC1DE8D09F00A74DD8 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		AE9FE6BE1DE8D15D00A74DD8 /* Business.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Business.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +74,12 @@
 		AE9FE6971DE2584900A74DD8 /* DeliciousNotes */ = {
 			isa = PBXGroup;
 			children = (
+				AE9FE6BA1DE8C41D00A74DD8 /* Location.swift */,
+				AE9FE6BC1DE8D09F00A74DD8 /* Category.swift */,
+				AE9FE6BE1DE8D15D00A74DD8 /* Business.swift */,
+				AE9FE6B51DE8BB4A00A74DD8 /* CoreDataStack.swift */,
+				AE9FE6B71DE8BBD900A74DD8 /* Model.xcdatamodeld */,
+				AE9FE6AE1DE2654A00A74DD8 /* Networking */,
 				AE9FE6981DE2584900A74DD8 /* AppDelegate.swift */,
 				AE9FE69A1DE2584900A74DD8 /* ViewController.swift */,
 				AE9FE69C1DE2584900A74DD8 /* Main.storyboard */,
@@ -62,6 +88,18 @@
 				AE9FE6A41DE2584900A74DD8 /* Info.plist */,
 			);
 			path = DeliciousNotes;
+			sourceTree = "<group>";
+		};
+		AE9FE6AE1DE2654A00A74DD8 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				AE9FE6AF1DE2686700A74DD8 /* ParseClient.swift */,
+				AE9FE6B31DE2724400A74DD8 /* YelpToken.swift */,
+				AE9FE6AA1DE2592000A74DD8 /* NetworkingProtocol.swift */,
+				AE9FE6AC1DE25EBE00A74DD8 /* YelpService.swift */,
+				AE9FE6B11DE26FA900A74DD8 /* ErrorEnum.swift */,
+			);
+			name = Networking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +175,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE9FE6B41DE2724400A74DD8 /* YelpToken.swift in Sources */,
+				AE9FE6AB1DE2592000A74DD8 /* NetworkingProtocol.swift in Sources */,
+				AE9FE6BB1DE8C41D00A74DD8 /* Location.swift in Sources */,
+				AE9FE6B01DE2686700A74DD8 /* ParseClient.swift in Sources */,
 				AE9FE69B1DE2584900A74DD8 /* ViewController.swift in Sources */,
 				AE9FE6991DE2584900A74DD8 /* AppDelegate.swift in Sources */,
+				AE9FE6B91DE8BBD900A74DD8 /* Model.xcdatamodeld in Sources */,
+				AE9FE6AD1DE25EBE00A74DD8 /* YelpService.swift in Sources */,
+				AE9FE6B21DE26FA900A74DD8 /* ErrorEnum.swift in Sources */,
+				AE9FE6BF1DE8D15D00A74DD8 /* Business.swift in Sources */,
+				AE9FE6B61DE8BB4A00A74DD8 /* CoreDataStack.swift in Sources */,
+				AE9FE6BD1DE8D09F00A74DD8 /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +350,19 @@
 			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		AE9FE6B71DE8BBD900A74DD8 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				AE9FE6B81DE8BBD900A74DD8 /* Model.xcdatamodel */,
+			);
+			currentVersion = AE9FE6B81DE8BBD900A74DD8 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = AE9FE68D1DE2584900A74DD8 /* Project object */;
 }
