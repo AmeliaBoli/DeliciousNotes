@@ -10,25 +10,33 @@ import Foundation
 import CoreData
 
 extension Location {
-    convenience init?(dictionary: [String: String], context: NSManagedObjectContext) {
+    convenience init?(dictionary: [String: Any], context: NSManagedObjectContext) {
         self.init(context: context)
 
-        guard let address1 = dictionary["address1"],
-            let address2 = dictionary["address2"],
-            let address3 = dictionary["address3"],
-            let city = dictionary["city"],
-            let state = dictionary["state"],
-            let zipCode = dictionary["zip_code"] else {
+        guard let address1 = dictionary["address1"] as? String,
+            let city = dictionary["city"] as? String,
+            let state = dictionary["state"] as? String,
+            let zipCode = dictionary["zip_code"] as? String else {
                 #if DEBUG
                     print("There was a problem finding the location properties in \(dictionary)")
                 #endif
                 return nil
         }
         self.address1 = address1
-        self.address2 = address2
-        self.address3 = address3
         self.city = city
         self.state = state
         self.zipCode = zipCode
+
+        if let address2 = dictionary["address2"] as? String {
+            self.address2 = address2
+        } else {
+            self.address2 = ""
+        }
+
+        if let address3 = dictionary["address3"] as? String {
+            self.address3 = address3
+        } else {
+            self.address3 = ""
+        }
     }
 }

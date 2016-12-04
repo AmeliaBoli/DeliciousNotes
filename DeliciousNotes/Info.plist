@@ -32,5 +32,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>In order to find restaurants nearby to add to the app, your location is required.</string>
 </dict>
 </plist>

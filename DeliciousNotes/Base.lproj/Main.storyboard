@@ -1,26 +1,271 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="sqP-uH-xXI">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Visited-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="VisitedViewController" customModule="DeliciousNotes" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dAQ-xL-xWd">
+                                <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                                <items>
+                                    <navigationItem title="Visited" id="jA3-R4-eH8">
+                                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="AaV-To-7q9">
+                                            <connections>
+                                                <action selector="editPressed:" destination="BYZ-38-t0r" id="vKi-NF-7vb"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="j3c-Di-uBx">
+                                <rect key="frame" x="16" y="64" width="288" height="29"/>
+                                <segments>
+                                    <segment title="Rating"/>
+                                    <segment title="Name"/>
+                                    <segment title="Category"/>
+                                </segments>
+                                <connections>
+                                    <action selector="filterChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="BZS-40-Yy4"/>
+                                </connections>
+                            </segmentedControl>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dhh-z5-BQ3">
+                                <rect key="frame" x="0.0" y="100" width="320" height="419"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="fyx-ZR-5NG" customClass="RestaurantSummaryTableViewCell" customModule="DeliciousNotes" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fyx-ZR-5NG" id="BIt-Fh-lHm">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="dAQ-xL-xWd" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Bl9-15-hbr"/>
+                            <constraint firstItem="dAQ-xL-xWd" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Ixs-sS-JdB"/>
+                            <constraint firstItem="j3c-Di-uBx" firstAttribute="top" secondItem="dAQ-xL-xWd" secondAttribute="bottom" id="Kib-to-5oY"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="dhh-z5-BQ3" secondAttribute="bottom" id="Rl0-jf-qwm"/>
+                            <constraint firstAttribute="trailing" secondItem="dAQ-xL-xWd" secondAttribute="trailing" id="UBb-i0-aJs"/>
+                            <constraint firstItem="dhh-z5-BQ3" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ZOV-M0-tR7"/>
+                            <constraint firstAttribute="trailing" secondItem="dhh-z5-BQ3" secondAttribute="trailing" id="bGp-GY-Jyh"/>
+                            <constraint firstItem="j3c-Di-uBx" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="eFh-8i-suI"/>
+                            <constraint firstItem="j3c-Di-uBx" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="qAR-vc-xxz"/>
+                            <constraint firstItem="dhh-z5-BQ3" firstAttribute="top" secondItem="j3c-Di-uBx" secondAttribute="bottom" constant="8" id="t6S-Qh-eWB"/>
+                        </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Visited" id="J85-4g-lgY"/>
+                    <connections>
+                        <outlet property="editButton" destination="AaV-To-7q9" id="7WS-bk-pzh"/>
+                        <outlet property="restaurantTableView" destination="dhh-z5-BQ3" id="sq3-Gn-vPT"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1037" y="880"/>
+        </scene>
+        <!--Search View Controller-->
+        <scene sceneID="592-L6-cUR">
+            <objects>
+                <viewController id="fgr-Ld-twv" customClass="SearchViewController" customModule="DeliciousNotes" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="8Vc-Tc-vkQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="a7d-7N-h4D"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="7C1-Jf-68P">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0WM-c7-YFf">
+                                <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                                <items>
+                                    <navigationItem title="Search" id="h2q-J8-vuq"/>
+                                </items>
+                            </navigationBar>
+                            <searchBar contentMode="redraw" placeholder="Restaurant" translatesAutoresizingMaskIntoConstraints="NO" id="ojq-Vr-Aol">
+                                <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
+                                <connections>
+                                    <outlet property="delegate" destination="fgr-Ld-twv" id="W8w-Qa-eYh"/>
+                                </connections>
+                            </searchBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="jW0-hM-lhH">
+                                <rect key="frame" x="0.0" y="108" width="320" height="411"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="restaurantCell" id="DYl-Uq-JEz" customClass="RestaurantSummaryTableViewCell" customModule="DeliciousNotes" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DYl-Uq-JEz" id="Tm6-FN-wMR">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="suggestionCell" textLabel="P7Z-Nh-nfj" style="IBUITableViewCellStyleDefault" id="Wew-eo-3ZC">
+                                        <rect key="frame" x="0.0" y="72" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Wew-eo-3ZC" id="qjb-QZ-feV">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="P7Z-Nh-nfj">
+                                                    <rect key="frame" x="15" y="0.0" width="290" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="fgr-Ld-twv" id="h2y-D9-THQ"/>
+                                    <outlet property="delegate" destination="fgr-Ld-twv" id="T25-3F-XpO"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="0WM-c7-YFf" firstAttribute="top" secondItem="8Vc-Tc-vkQ" secondAttribute="bottom" id="4KD-Xl-Rc8"/>
+                            <constraint firstItem="a7d-7N-h4D" firstAttribute="top" secondItem="jW0-hM-lhH" secondAttribute="bottom" id="II4-aa-Xtd"/>
+                            <constraint firstAttribute="trailing" secondItem="jW0-hM-lhH" secondAttribute="trailing" id="KcL-hm-Rcu"/>
+                            <constraint firstItem="ojq-Vr-Aol" firstAttribute="top" secondItem="0WM-c7-YFf" secondAttribute="bottom" id="Mg3-jT-P4A"/>
+                            <constraint firstAttribute="trailing" secondItem="ojq-Vr-Aol" secondAttribute="trailing" id="Tmj-v1-vQt"/>
+                            <constraint firstItem="0WM-c7-YFf" firstAttribute="leading" secondItem="7C1-Jf-68P" secondAttribute="leading" id="V2F-el-D2Y"/>
+                            <constraint firstItem="ojq-Vr-Aol" firstAttribute="leading" secondItem="7C1-Jf-68P" secondAttribute="leading" id="a9W-zQ-jQP"/>
+                            <constraint firstAttribute="trailing" secondItem="0WM-c7-YFf" secondAttribute="trailing" id="aNE-rO-ddh"/>
+                            <constraint firstItem="jW0-hM-lhH" firstAttribute="top" secondItem="ojq-Vr-Aol" secondAttribute="bottom" id="dwk-fr-oEq"/>
+                            <constraint firstItem="jW0-hM-lhH" firstAttribute="leading" secondItem="7C1-Jf-68P" secondAttribute="leading" id="lxa-am-m4Y"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" systemItem="search" id="dXm-Hd-KAR"/>
+                    <connections>
+                        <outlet property="searchBar" destination="ojq-Vr-Aol" id="vSW-vp-KZZ"/>
+                        <outlet property="searchResultsTableView" destination="jW0-hM-lhH" id="HNt-o4-nVA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kOb-WH-Dcu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1018" y="135"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="LOY-ma-mMr">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="sqP-uH-xXI" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="oHc-Gt-GQ5">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="ZbC-1A-UWq"/>
+                        <segue destination="gg5-Jk-20T" kind="relationship" relationship="viewControllers" id="9FB-p1-wHW"/>
+                        <segue destination="fgr-Ld-twv" kind="relationship" relationship="viewControllers" id="ySa-6M-fu7"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bUV-xF-952" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="135.38230884557723"/>
+        </scene>
+        <!--Wishlist-->
+        <scene sceneID="eHR-ll-Lqg">
+            <objects>
+                <viewController id="gg5-Jk-20T" customClass="WishlistViewController" customModule="DeliciousNotes" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Z6r-5e-dUL"/>
+                        <viewControllerLayoutGuide type="bottom" id="08j-b4-0gY"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="SNb-b7-ak6">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nll-LY-6E8">
+                                <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                                <items>
+                                    <navigationItem title="Wishlist" id="5ZU-h5-o1O">
+                                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="gjq-ca-M58">
+                                            <connections>
+                                                <action selector="editPressed:" destination="gg5-Jk-20T" id="CNk-gx-hl5"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="s2O-R3-kkq">
+                                <rect key="frame" x="16" y="64" width="288" height="29"/>
+                                <segments>
+                                    <segment title="Rating"/>
+                                    <segment title="Name"/>
+                                    <segment title="Category"/>
+                                </segments>
+                                <connections>
+                                    <action selector="filterChanged:" destination="gg5-Jk-20T" eventType="valueChanged" id="fDk-dJ-fpr"/>
+                                </connections>
+                            </segmentedControl>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="xA0-Ii-RRg">
+                                <rect key="frame" x="0.0" y="100" width="320" height="419"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="YGg-DC-u6f" customClass="RestaurantSummaryTableViewCell" customModule="DeliciousNotes" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YGg-DC-u6f" id="LV9-dv-IeK">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="s2O-R3-kkq" firstAttribute="leading" secondItem="SNb-b7-ak6" secondAttribute="leadingMargin" id="6Bz-T6-2eb"/>
+                            <constraint firstItem="nll-LY-6E8" firstAttribute="top" secondItem="Z6r-5e-dUL" secondAttribute="bottom" id="ENL-6a-FKc"/>
+                            <constraint firstAttribute="trailing" secondItem="nll-LY-6E8" secondAttribute="trailing" id="UQ6-EX-CwC"/>
+                            <constraint firstAttribute="trailing" secondItem="xA0-Ii-RRg" secondAttribute="trailing" id="YUX-EJ-fXI"/>
+                            <constraint firstItem="xA0-Ii-RRg" firstAttribute="leading" secondItem="SNb-b7-ak6" secondAttribute="leading" id="dSx-gA-0tP"/>
+                            <constraint firstItem="nll-LY-6E8" firstAttribute="leading" secondItem="SNb-b7-ak6" secondAttribute="leading" id="dUD-md-gwQ"/>
+                            <constraint firstItem="s2O-R3-kkq" firstAttribute="trailing" secondItem="SNb-b7-ak6" secondAttribute="trailingMargin" id="g1o-8Z-1lD"/>
+                            <constraint firstItem="08j-b4-0gY" firstAttribute="top" secondItem="xA0-Ii-RRg" secondAttribute="bottom" id="oCe-as-04G"/>
+                            <constraint firstItem="s2O-R3-kkq" firstAttribute="top" secondItem="nll-LY-6E8" secondAttribute="bottom" id="vYb-AD-i5b"/>
+                            <constraint firstItem="xA0-Ii-RRg" firstAttribute="top" secondItem="s2O-R3-kkq" secondAttribute="bottom" constant="8" id="xcp-DG-0QN"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Wishlist" id="dMw-1D-JJc"/>
+                    <connections>
+                        <outlet property="editButton" destination="gjq-ca-M58" id="o8a-ZF-7vW"/>
+                        <outlet property="restaurantTableView" destination="xA0-Ii-RRg" id="aff-lI-Nel"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ywc-L4-MyN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="137" y="880"/>
         </scene>
     </scenes>
 </document>

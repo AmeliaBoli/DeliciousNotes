@@ -13,14 +13,14 @@ extension Category {
     convenience init?(dictionary: [String: String], context: NSManagedObjectContext) {
         self.init(context: context)
         guard let alias = dictionary["alias"],
-            let title = dictionary["title"] else {
+            let title = dictionary["title"],
+            let _ = YelpCategory(rawValue: title) else {
                 #if DEBUG
-                    print("There was a problem finding the category properties in \(dictionary)")
+                    print("There was a problem finding the category properties in \(dictionary) or it is not a food category")
                 #endif
                 return nil
         }
-
-        self.alias = alias
-        self.title = title
+            self.alias = alias
+            self.title = title
     }
 }

@@ -6,7 +6,7 @@
         <attribute name="isClosed" optional="YES" transient="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" transient="YES" attributeType="String" syncable="YES"/>
         <attribute name="phone" optional="YES" transient="YES" attributeType="String" syncable="YES"/>
-        <attribute name="rating" optional="YES" transient="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="rating" optional="YES" transient="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="reviewCount" optional="YES" transient="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="yelpUrl" optional="YES" transient="YES" attributeType="String" syncable="YES"/>
@@ -17,11 +17,6 @@
         <attribute name="alias" optional="YES" transient="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" transient="YES" attributeType="String" syncable="YES"/>
         <relationship name="business" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Business" inverseName="category" inverseEntity="Business" syncable="YES"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="alias"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
     </entity>
     <entity name="Location" representedClassName="Location" syncable="YES" codeGenerationType="class">
         <attribute name="address1" optional="YES" transient="YES" attributeType="String" syncable="YES"/>
@@ -34,7 +29,7 @@
     </entity>
     <elements>
         <element name="Business" positionX="-63" positionY="-18" width="128" height="210"/>
-        <element name="Category" positionX="-54" positionY="54" width="128" height="90"/>
-        <element name="Location" positionX="-36" positionY="63" width="128" height="150"/>
+        <element name="Category" positionX="178" positionY="-36" width="128" height="90"/>
+        <element name="Location" positionX="396" positionY="72" width="128" height="150"/>
     </elements>
 </model>
