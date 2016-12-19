@@ -91,6 +91,44 @@ class YelpInterface {
             }
         }
     }
+
+    func fetchBusiness(businessId: String, completionHandlerForBusiness: @escaping ( _ success: Bool, _ error: Error?) -> Void) {
+        if token.isValid() {
+            yelpService.getBusiness(businessId: businessId) { success, error in
+                    guard error == nil,
+                    success else {
+                        #if DEBUG
+                            print("There was a problem with getting the business \(businessId): \(error)")
+                        #endif
+                        completionHandlerForBusiness(false, error)
+                        return
+                }
+                completionHandlerForBusiness(true, nil)
+            }
+        } else {
+            yelpService.getToken() { success, error in
+                guard success,
+                    error == nil else {
+                        #if DEBUG
+                            print("There was a problem retrieving the token: \(error)")
+                        #endif
+                        completionHandlerForBusiness(false, error)
+                        return
+                }
+                self.yelpService.getBusiness(businessId: businessId) { success, error in
+                    guard error == nil,
+                        success else {
+                            #if DEBUG
+                                print("There was a problem with getting the business \(businessId): \(error)")
+                            #endif
+                            completionHandlerForBusiness(false, error)
+                            return
+                    }
+                    completionHandlerForBusiness(true, nil)
+                }
+            }
+        }
+    }
 }
 
 //        YelpService.sharedInstance.search(byTerm: nil, byCategory: firstTerm!, latitude: 37.7, longitude: -122.3) { success, error in

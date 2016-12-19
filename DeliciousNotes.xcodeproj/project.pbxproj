@@ -14,9 +14,11 @@
 		AE2447611DE9FEC1001561F7 /* yelp-2c.png in Resources */ = {isa = PBXBuildFile; fileRef = AE2447601DE9FEC1001561F7 /* yelp-2c.png */; };
 		AE2447631DEA002F001561F7 /* burger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AE2447621DEA002F001561F7 /* burger.jpg */; };
 		AE2447651DEA048D001561F7 /* RestaurantSummaryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2447641DEA048D001561F7 /* RestaurantSummaryTableViewCell.swift */; };
-		AE2447671DEA0596001561F7 /* Science-Plus2-Math-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AE2447661DEA0596001561F7 /* Science-Plus2-Math-icon.png */; };
 		AE24476E1DEA08A4001561F7 /* YelpInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE24476D1DEA08A4001561F7 /* YelpInterface.swift */; };
 		AE2447701DEA2A05001561F7 /* YelpCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE24476F1DEA2A05001561F7 /* YelpCategory.swift */; };
+		AE9A79091E05D1FF00E9E4A5 /* RestaurantDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9A79081E05D1FF00E9E4A5 /* RestaurantDetailsViewController.swift */; };
+		AE9A790B1E05D89D00E9E4A5 /* YelpRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9A790A1E05D89D00E9E4A5 /* YelpRating.swift */; };
+		AE9F04ED1E06103800DE6F1E /* UserRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9F04EC1E06103800DE6F1E /* UserRating.swift */; };
 		AE9FE6991DE2584900A74DD8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6981DE2584900A74DD8 /* AppDelegate.swift */; };
 		AE9FE69B1DE2584900A74DD8 /* VisitedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE69A1DE2584900A74DD8 /* VisitedViewController.swift */; };
 		AE9FE69E1DE2584900A74DD8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE9FE69C1DE2584900A74DD8 /* Main.storyboard */; };
@@ -31,6 +33,10 @@
 		AE9FE6BB1DE8C41D00A74DD8 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6BA1DE8C41D00A74DD8 /* Location.swift */; };
 		AE9FE6BD1DE8D09F00A74DD8 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6BC1DE8D09F00A74DD8 /* Category.swift */; };
 		AE9FE6BF1DE8D15D00A74DD8 /* Business.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6BE1DE8D15D00A74DD8 /* Business.swift */; };
+		AEA5E15B1E076CD500D86049 /* Sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA5E15A1E076CD500D86049 /* Sort.swift */; };
+		AEA9A2471DFC81DE00582800 /* RestaurantListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA9A2461DFC81DE00582800 /* RestaurantListDataSource.swift */; };
+		AEF08D091DFC6A58008A5F5B /* CoreDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF08D081DFC6A58008A5F5B /* CoreDataTableViewController.swift */; };
+		AEF0F1261E060BE500734255 /* RatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF0F1251E060BE500734255 /* RatingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,9 +47,11 @@
 		AE2447601DE9FEC1001561F7 /* yelp-2c.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yelp-2c.png"; sourceTree = "<group>"; };
 		AE2447621DEA002F001561F7 /* burger.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = burger.jpg; sourceTree = "<group>"; };
 		AE2447641DEA048D001561F7 /* RestaurantSummaryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestaurantSummaryTableViewCell.swift; sourceTree = "<group>"; };
-		AE2447661DEA0596001561F7 /* Science-Plus2-Math-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Science-Plus2-Math-icon.png"; sourceTree = "<group>"; };
 		AE24476D1DEA08A4001561F7 /* YelpInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpInterface.swift; sourceTree = "<group>"; };
 		AE24476F1DEA2A05001561F7 /* YelpCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpCategory.swift; sourceTree = "<group>"; };
+		AE9A79081E05D1FF00E9E4A5 /* RestaurantDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestaurantDetailsViewController.swift; sourceTree = "<group>"; };
+		AE9A790A1E05D89D00E9E4A5 /* YelpRating.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpRating.swift; sourceTree = "<group>"; };
+		AE9F04EC1E06103800DE6F1E /* UserRating.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserRating.swift; sourceTree = "<group>"; };
 		AE9FE6951DE2584900A74DD8 /* DeliciousNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeliciousNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE9FE6981DE2584900A74DD8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AE9FE69A1DE2584900A74DD8 /* VisitedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitedViewController.swift; sourceTree = "<group>"; };
@@ -60,6 +68,10 @@
 		AE9FE6BA1DE8C41D00A74DD8 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		AE9FE6BC1DE8D09F00A74DD8 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		AE9FE6BE1DE8D15D00A74DD8 /* Business.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Business.swift; sourceTree = "<group>"; };
+		AEA5E15A1E076CD500D86049 /* Sort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sort.swift; sourceTree = "<group>"; };
+		AEA9A2461DFC81DE00582800 /* RestaurantListDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestaurantListDataSource.swift; sourceTree = "<group>"; };
+		AEF08D081DFC6A58008A5F5B /* CoreDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataTableViewController.swift; sourceTree = "<group>"; };
+		AEF0F1251E060BE500734255 /* RatingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +104,6 @@
 				AE2447601DE9FEC1001561F7 /* yelp-2c.png */,
 				AE24475E1DE9FC0E001561F7 /* folding.png */,
 				AE2447621DEA002F001561F7 /* burger.jpg */,
-				AE2447661DEA0596001561F7 /* Science-Plus2-Math-icon.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -100,9 +111,12 @@
 		AE24476A1DEA0772001561F7 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				AEF0F1251E060BE500734255 /* RatingViewController.swift */,
 				AE9FE69A1DE2584900A74DD8 /* VisitedViewController.swift */,
 				AE2447581DE9F693001561F7 /* WishlistViewController.swift */,
+				AE9A79081E05D1FF00E9E4A5 /* RestaurantDetailsViewController.swift */,
 				AE24475A1DE9F71F001561F7 /* SearchViewController.swift */,
+				AEF08D081DFC6A58008A5F5B /* CoreDataTableViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -144,6 +158,9 @@
 		AE9FE6971DE2584900A74DD8 /* DeliciousNotes */ = {
 			isa = PBXGroup;
 			children = (
+				AEA5E15A1E076CD500D86049 /* Sort.swift */,
+				AE9A790A1E05D89D00E9E4A5 /* YelpRating.swift */,
+				AE9F04EC1E06103800DE6F1E /* UserRating.swift */,
 				AE9FE6981DE2584900A74DD8 /* AppDelegate.swift */,
 				AE2447681DEA0730001561F7 /* Model */,
 				AE9FE6AE1DE2654A00A74DD8 /* Networking */,
@@ -151,6 +168,7 @@
 				AE24476B1DEA077C001561F7 /* Views */,
 				AE24476A1DEA0772001561F7 /* ViewControllers */,
 				AE9FE69C1DE2584900A74DD8 /* Main.storyboard */,
+				AEA9A2461DFC81DE00582800 /* RestaurantListDataSource.swift */,
 				AE24476C1DEA078C001561F7 /* Supporting Files */,
 			);
 			path = DeliciousNotes;
@@ -229,7 +247,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE2447671DEA0596001561F7 /* Science-Plus2-Math-icon.png in Resources */,
 				AE24475F1DE9FC0E001561F7 /* folding.png in Resources */,
 				AE9FE6A31DE2584900A74DD8 /* LaunchScreen.storyboard in Resources */,
 				AE2447611DE9FEC1001561F7 /* yelp-2c.png in Resources */,
@@ -249,17 +266,24 @@
 			files = (
 				AE2447651DEA048D001561F7 /* RestaurantSummaryTableViewCell.swift in Sources */,
 				AE9FE6B41DE2724400A74DD8 /* YelpToken.swift in Sources */,
+				AE9A79091E05D1FF00E9E4A5 /* RestaurantDetailsViewController.swift in Sources */,
 				AE9FE6AB1DE2592000A74DD8 /* NetworkingProtocol.swift in Sources */,
 				AE9FE6BB1DE8C41D00A74DD8 /* Location.swift in Sources */,
 				AE2447591DE9F693001561F7 /* WishlistViewController.swift in Sources */,
+				AEF0F1261E060BE500734255 /* RatingViewController.swift in Sources */,
 				AE2447701DEA2A05001561F7 /* YelpCategory.swift in Sources */,
 				AE9FE69B1DE2584900A74DD8 /* VisitedViewController.swift in Sources */,
+				AE9F04ED1E06103800DE6F1E /* UserRating.swift in Sources */,
 				AE9FE6991DE2584900A74DD8 /* AppDelegate.swift in Sources */,
 				AE9FE6B91DE8BBD900A74DD8 /* Model.xcdatamodeld in Sources */,
+				AEA9A2471DFC81DE00582800 /* RestaurantListDataSource.swift in Sources */,
 				AE24475B1DE9F71F001561F7 /* SearchViewController.swift in Sources */,
 				AE9FE6AD1DE25EBE00A74DD8 /* YelpService.swift in Sources */,
+				AEF08D091DFC6A58008A5F5B /* CoreDataTableViewController.swift in Sources */,
+				AE9A790B1E05D89D00E9E4A5 /* YelpRating.swift in Sources */,
 				AE24476E1DEA08A4001561F7 /* YelpInterface.swift in Sources */,
 				AE9FE6B21DE26FA900A74DD8 /* ErrorEnum.swift in Sources */,
+				AEA5E15B1E076CD500D86049 /* Sort.swift in Sources */,
 				AE9FE6BF1DE8D15D00A74DD8 /* Business.swift in Sources */,
 				AE9FE6B61DE8BB4A00A74DD8 /* CoreDataStack.swift in Sources */,
 				AE9FE6BD1DE8D09F00A74DD8 /* Category.swift in Sources */,

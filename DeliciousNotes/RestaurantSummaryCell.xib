@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -17,7 +17,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="z8I-jK-esg" id="Qo0-Dx-oKO">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="74"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f7k-9c-b4J">
@@ -26,7 +26,11 @@
                             <constraint firstAttribute="height" constant="40" id="4kH-yg-Lns"/>
                             <constraint firstAttribute="width" constant="40" id="NCF-xU-whx"/>
                         </constraints>
-                        <state key="normal" image="Science-Plus2-Math-icon.png"/>
+                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <state key="normal" image="Science-Plus2-Math-icon"/>
+                        <connections>
+                            <action selector="addPressed:" destination="z8I-jK-esg" eventType="touchUpInside" id="SNX-tE-8br"/>
+                        </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Macayos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h57-0V-Irh">
                         <rect key="frame" x="98" y="8" width="193" height="15"/>
@@ -41,7 +45,7 @@
                             <constraint firstAttribute="height" constant="21" id="YFI-yL-EgC"/>
                         </constraints>
                     </imageView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="burger.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="PtR-I7-lIl">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PtR-I7-lIl">
                         <rect key="frame" x="40" y="13" width="50" height="50"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="50" id="Xbb-8h-YCg"/>
@@ -80,7 +84,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mexican Restaurant" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j44-6e-XCB">
-                        <rect key="frame" x="98" y="53" width="149" height="18"/>
+                        <rect key="frame" x="98" y="53" width="222" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -91,20 +95,12 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eb4-fs-eCo">
-                        <rect key="frame" x="247" y="43" width="65" height="37"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="65" id="WJd-Rc-J0U"/>
-                            <constraint firstAttribute="width" secondItem="Eb4-fs-eCo" secondAttribute="height" multiplier="675:383" id="jde-fC-vlm"/>
-                        </constraints>
-                        <state key="normal" image="yelp-2c.png"/>
-                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="asN-kN-wK0" firstAttribute="leading" secondItem="ZKb-Eb-Nml" secondAttribute="trailing" constant="2" id="1Ne-ky-osF"/>
+                    <constraint firstItem="PtR-I7-lIl" firstAttribute="leading" secondItem="Qo0-Dx-oKO" secondAttribute="leadingMargin" id="2TP-qK-ckT"/>
                     <constraint firstItem="bni-Bj-fjG" firstAttribute="top" secondItem="h57-0V-Irh" secondAttribute="bottom" constant="4" id="5Y7-KR-XcZ"/>
                     <constraint firstItem="QMZ-52-ifx" firstAttribute="height" secondItem="bni-Bj-fjG" secondAttribute="height" id="5g1-wd-phN"/>
-                    <constraint firstItem="Eb4-fs-eCo" firstAttribute="leading" secondItem="j44-6e-XCB" secondAttribute="trailing" id="5zo-5Z-8WP"/>
                     <constraint firstItem="jua-vi-PcB" firstAttribute="centerY" secondItem="h57-0V-Irh" secondAttribute="centerY" id="6Io-DS-b51"/>
                     <constraint firstItem="j44-6e-XCB" firstAttribute="leading" secondItem="PtR-I7-lIl" secondAttribute="trailing" constant="8" id="Cnb-ne-hBQ"/>
                     <constraint firstItem="asN-kN-wK0" firstAttribute="top" secondItem="QMZ-52-ifx" secondAttribute="top" id="Dzt-ZC-ddf"/>
@@ -115,10 +111,10 @@
                     <constraint firstItem="f7k-9c-b4J" firstAttribute="leading" secondItem="Qo0-Dx-oKO" secondAttribute="leading" id="Ia8-Do-82Q"/>
                     <constraint firstItem="QMZ-52-ifx" firstAttribute="top" secondItem="fUK-Ct-dTX" secondAttribute="top" id="KD1-Xk-53a"/>
                     <constraint firstItem="jua-vi-PcB" firstAttribute="leading" secondItem="h57-0V-Irh" secondAttribute="trailing" id="MzH-Ui-hKt"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="Eb4-fs-eCo" secondAttribute="trailing" id="Pv5-LU-CJB"/>
                     <constraint firstItem="PtR-I7-lIl" firstAttribute="centerY" secondItem="f7k-9c-b4J" secondAttribute="centerY" id="Qi1-Ml-tTX"/>
                     <constraint firstItem="fUK-Ct-dTX" firstAttribute="leading" secondItem="QMZ-52-ifx" secondAttribute="trailing" constant="2" id="Rux-bF-FOa"/>
                     <constraint firstItem="QMZ-52-ifx" firstAttribute="leading" secondItem="asN-kN-wK0" secondAttribute="trailing" constant="2" id="T27-iw-4wL"/>
+                    <constraint firstAttribute="trailing" secondItem="j44-6e-XCB" secondAttribute="trailing" id="T9y-UQ-gJC"/>
                     <constraint firstItem="bni-Bj-fjG" firstAttribute="top" secondItem="ZKb-Eb-Nml" secondAttribute="top" id="TDb-bc-Pmw"/>
                     <constraint firstItem="ZKb-Eb-Nml" firstAttribute="height" secondItem="bni-Bj-fjG" secondAttribute="height" id="XWQ-Ke-v5X"/>
                     <constraint firstAttribute="trailing" secondItem="CXw-ES-mT0" secondAttribute="trailing" id="Z4N-6v-l0a"/>
@@ -128,14 +124,19 @@
                     <constraint firstItem="bni-Bj-fjG" firstAttribute="leading" secondItem="PtR-I7-lIl" secondAttribute="trailing" constant="8" id="cZY-XJ-d52"/>
                     <constraint firstItem="CXw-ES-mT0" firstAttribute="leading" secondItem="fUK-Ct-dTX" secondAttribute="trailing" constant="4" id="ffH-Dw-pwp"/>
                     <constraint firstItem="j44-6e-XCB" firstAttribute="top" secondItem="bni-Bj-fjG" secondAttribute="bottom" constant="4" id="jSC-DC-u3T"/>
-                    <constraint firstItem="Eb4-fs-eCo" firstAttribute="centerY" secondItem="j44-6e-XCB" secondAttribute="centerY" id="jou-lt-Bom"/>
                     <constraint firstItem="ZKb-Eb-Nml" firstAttribute="top" secondItem="asN-kN-wK0" secondAttribute="top" id="nXx-Rp-LFd"/>
                     <constraint firstItem="PtR-I7-lIl" firstAttribute="leading" secondItem="f7k-9c-b4J" secondAttribute="trailing" id="on5-h4-EIp"/>
                     <constraint firstItem="f7k-9c-b4J" firstAttribute="centerY" secondItem="Qo0-Dx-oKO" secondAttribute="centerY" id="qjA-bX-hch"/>
                     <constraint firstItem="bni-Bj-fjG" firstAttribute="centerY" secondItem="PtR-I7-lIl" secondAttribute="centerY" id="yT8-iH-cyn"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="2TP-qK-ckT"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <connections>
+                <outlet property="addButton" destination="f7k-9c-b4J" id="5oo-jG-55K"/>
                 <outlet property="categoriesLabel" destination="j44-6e-XCB" id="Igj-0Y-9hg"/>
                 <outlet property="fifthRatingIcon" destination="fUK-Ct-dTX" id="ITr-1y-4cG"/>
                 <outlet property="firstRatingIcon" destination="bni-Bj-fjG" id="X3F-HV-V6F"/>
@@ -143,6 +144,7 @@
                 <outlet property="napkinNotesIcon" destination="jua-vi-PcB" id="uur-a0-HeO"/>
                 <outlet property="numberOrReviewsLabel" destination="CXw-ES-mT0" id="Vvz-Ob-nb9"/>
                 <outlet property="restaurantImage" destination="PtR-I7-lIl" id="SL8-js-4lA"/>
+                <outlet property="restaurantImageLeadingConstraint" destination="2TP-qK-ckT" id="KcF-BM-cam"/>
                 <outlet property="restaurantName" destination="h57-0V-Irh" id="Bts-76-FBM"/>
                 <outlet property="secondRatingIcon" destination="ZKb-Eb-Nml" id="XO4-FW-MtV"/>
                 <outlet property="thirdRatingIcon" destination="asN-kN-wK0" id="8Rz-yU-mYg"/>
@@ -154,9 +156,7 @@
         <image name="19x19_0" width="19" height="19"/>
         <image name="20x20_0" width="20" height="20"/>
         <image name="20x20_1-5" width="20" height="20"/>
-        <image name="Science-Plus2-Math-icon.png" width="512" height="512"/>
-        <image name="burger.jpg" width="562" height="1000"/>
+        <image name="Science-Plus2-Math-icon" width="512" height="512"/>
         <image name="folding.png" width="128" height="128"/>
-        <image name="yelp-2c.png" width="675" height="383"/>
     </resources>
 </document>

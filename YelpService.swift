@@ -82,6 +82,7 @@ class YelpService: Networking {
         static let OAuth = "/oauth2/token"
         static let AutoComplete = "/autocomplete"
         static let Search = "/businesses/search"
+        static let Businesses = "/businesses"
     }
 
     // Parameter Keys
@@ -116,9 +117,7 @@ class YelpService: Networking {
             do {
                 let existingBusinesses = try self.stack.context.fetch(businessFetch)
                 if let firstBusiness = existingBusinesses.first {
-                    print("%%%%% FIRST \(firstBusiness) with \(firstBusiness.id) with\(firstBusiness.name)")
                     if firstBusiness.update(dictionary: dictionary, context: self.stack.context) {
-                        print("%%%%% SECOND \(firstBusiness) with \(firstBusiness.id) with\(firstBusiness.name)")
                         return firstBusiness
                     } else {
                         #if DEBUG
@@ -187,34 +186,6 @@ class YelpService: Networking {
                     }
                 }
             }
-//                    let categoryFetch: NSFetchRequest<Category> = Category.fetchRequest()
-//                    categoryFetch.predicate = NSPredicate(format: "alias = %@", argumentArray: [alias])
-//
-//                    do {
-//                        let existingCategories = try self.stack.context.fetch(categoryFetch)
-//
-//                        if let firstCategory = existingCategories.first {
-//                            suggestions.categories.append(firstCategory)
-//                        } else {
-//                            if let newCategory = Category(dictionary: category, context: self.stack.context) {
-//                                suggestions.categories.append(newCategory)
-//                            } else {
-//                                #if DEBUG
-//                                    print("A category could not be completed with \(category)")
-//                                #endif
-//                            }
-//                        }
-//                    } catch {
-//                        #if DEBUG
-//                            print("There was a problem fetching categories for autocomplete: \(error)")
-//                        #endif
-//                    }
-//                } else {
-//                    #if DEBUG
-//                        print("There was no alias in \(category)")
-//                    #endif
-//                }
-//            }
 
             for business in formattedBusinesses {
                 if let businessName = business["name"] {
@@ -250,12 +221,30 @@ class YelpService: Networking {
 
             for business in businesses {
                 if let newBusiness = self.saveBusiness(dictionary: business) {
-                    print("##### Categories: \(newBusiness.category)")
                     businessesToReturn.append(newBusiness)
                 }
 
             }
             completionHandlerForSearch(businessesToReturn, nil)
+        }
+    }
+
+    func getBusiness(businessId: String, completionHandlerForGetBusiness: @escaping (_ success: Bool, _ error: Error?) -> Void) {
+
+        let pathExtension = Methods.Businesses + "/" + businessId
+        _ = getMethod(parameters: [:], path: Constants.SearchPath, pathExtension: pathExtension) { result, error in
+            guard error == nil,
+                let businessDictionary = result else {
+                    // TODO: flush this out more
+                    completionHandlerForGetBusiness(false, .inApp)
+                    return
+            }
+
+            if let _ = self.saveBusiness(dictionary: businessDictionary) {
+                completionHandlerForGetBusiness(true, nil)
+            } else {
+                completionHandlerForGetBusiness(false, .inApp)
+            }
         }
     }
 
@@ -269,7 +258,6 @@ class YelpService: Networking {
             completionHandlerForGet(nil, .inApp)
             return
         }
-        print(url)
         var request = URLRequest(url: url)
         request.addValue("Bearer \(token.getTokenId())", forHTTPHeaderField: "Authorization")
 
@@ -335,7 +323,6 @@ class YelpService: Networking {
                 
                 let sharedToken = YelpToken.sharedInstance
                 sharedToken.set(newToken: token, newExpirationDate: expirationDate)
-                print(YelpToken.sharedInstance.getTokenId)
                 completionHandlerForGetToken(true, nil)
             }
         }

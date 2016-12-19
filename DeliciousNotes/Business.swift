@@ -37,7 +37,7 @@ extension Business {
         self.id = id
         self.name = name
         self.status = status.rawValue
-        self.rating = rating
+        self.yelpRating = rating
         self.isClosed = isClosed
         self.reviewCount = reviewCount
         self.yelpUrl = yelpUrl
@@ -58,19 +58,21 @@ extension Business {
 
         var categoriesToSave = Set<Category>()
 
-        for category in categories {
+        for (index, category) in categories.enumerated() {
             guard let newCategory = Category(dictionary: category, context: context) else {
                 #if DEBUG
                     print("There was a problem creating the category from \(category)")
                 #endif
                 return nil
             }
-            print("##### New Category: \(newCategory)\n####")
+
+            if index == 0 {
+                self.preferredCategory = newCategory.title
+            }
+
             categoriesToSave.insert(newCategory)
         }
-        print("##### Categories To Save: \(categoriesToSave)\n#####")
         self.addToCategory(categoriesToSave as NSSet)
-        print("##### Saved Category: \(self.category)\n#####")
     }
 
     var categories: String {
@@ -79,9 +81,7 @@ extension Business {
         guard let categorySet = self.category else {
             return categoriesString
         }
-        print("#####Categories: \(categorySet)\n######")
         for category in categorySet {
-            print("#####Category: \(category)\n######")
             if let title = (category as! Category).title {
                 if categoriesString.isEmpty {
                     categoriesString += title
@@ -135,7 +135,7 @@ extension Business {
 
         self.name = name
         self.phone = phone
-        self.rating = rating
+        self.yelpRating = rating
         self.isClosed = isClosed
         self.reviewCount = reviewCount
         self.yelpUrl = yelpUrl
@@ -152,7 +152,6 @@ extension Business {
 
         var categoriesToSave = Set<Category>()
 
-        print(categories)
         for category in categories {
             guard let newCategory = Category(dictionary: category, context: context) else {
                 #if DEBUG
@@ -164,5 +163,18 @@ extension Business {
         }
         self.addToCategory(categoriesToSave as NSSet)
         return true
+    }
+
+    func displayPhone() -> String {
+        guard var phone = self.phone else {
+            return ""
+        }
+
+        phone.removeSubrange(phone.startIndex...phone.index(phone.startIndex, offsetBy: 1))
+        phone.insert("(", at: phone.startIndex)
+        let areaCodeEndCharacters = (") ").characters
+        phone.insert(contentsOf: areaCodeEndCharacters, at: phone.index(phone.startIndex, offsetBy: 4))
+        phone.insert("-", at: phone.index(phone.startIndex, offsetBy: 9))
+        return phone
     }
 }

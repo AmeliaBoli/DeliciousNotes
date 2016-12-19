@@ -17,8 +17,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let stack = StackSingleton.sharedInstance.stack
     let locationManager = CLLocationManager()
 
+    var existingWishlistDataUpdated = false
+    var existingVisitedDataUpdated = false
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+
         stack?.autoSave(delayInSeconds: 30)
         return true
     }
@@ -47,7 +51,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         stack?.save()
     }
-
-
 }
 

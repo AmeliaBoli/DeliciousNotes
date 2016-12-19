@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import CoreData
 
 class SearchViewController: UIViewController {
 
@@ -19,16 +20,21 @@ class SearchViewController: UIViewController {
 
     var autocompleteSuggesions = [[String: Any]]()
     var searchResults = [Business]()
+    var restaurantImages = [UIImage?]()
 
     var currentLocation: CLLocation?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        
         //TODO: Fix search bar alignment- setPositionAdjustment did nothing
         let locationManager = (UIApplication.shared.delegate as! AppDelegate).locationManager
         locationManager.delegate = self
         searchResultsTableView.register(UINib(nibName: "RestaurantSummaryCell", bundle: nil),forCellReuseIdentifier: "restaurantCell")
+
+        searchResultsTableView.estimatedRowHeight = 86
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -43,6 +49,17 @@ class SearchViewController: UIViewController {
             locationManager.startUpdatingLocation()
         }
     }
+
+    @IBAction func yelpPressed(_ sender: UIButton) {
+        let urlString = "https://www.yelp.com"
+
+        guard let url = URL(string: urlString) else {
+            return
+        }
+
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+
 }
 
 extension SearchViewController: CLLocationManagerDelegate {
@@ -79,107 +96,67 @@ extension SearchViewController: CLLocationManagerDelegate {
 
 extension SearchViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0: return autocompleteSuggesions.count
-        case 1: return searchResults.count
-        default: return 0
+        if !searchResults.isEmpty {
+            return searchResults.count
+        } else {
+            return autocompleteSuggesions.count
         }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
-            let suggestion = autocompleteSuggesions[indexPath.row]
+        if searchResults.isEmpty {
             let cell = tableView.dequeueReusableCell(withIdentifier: "suggestionCell")
 
-            if let firstKey = suggestion.keys.first {
-                switch firstKey {
-                case "term": cell?.textLabel?.text = suggestion["term"] as? String
-                case "alias", "title":  cell?.textLabel?.text = suggestion["title"] as? String
-                cell?.textLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-                case "business": cell?.textLabel?.text = suggestion["business"] as? String
-                default: break
+            if indexPath.row < autocompleteSuggesions.count {
+                let suggestion = autocompleteSuggesions[indexPath.row]
+
+                if let firstKey = suggestion.keys.first {
+                    switch firstKey {
+                    case "term": cell?.textLabel?.text = suggestion["term"] as? String
+                    case "alias", "title":  cell?.textLabel?.text = suggestion["title"] as? String
+                    cell?.textLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+                    case "business": cell?.textLabel?.text = suggestion["business"] as? String
+                    default: break
+                    }
                 }
             }
             return cell!
-        case 1:
+        } else {
             let business = searchResults[indexPath.row]
             let cell = tableView.dequeueReusableCell(withIdentifier: "restaurantCell") as! RestaurantSummaryTableViewCell
-            print(business.categories)
-            cell.categoriesLabel.text = business.categories
-            cell.napkinNotesIcon.isHidden = true
-            cell.numberOrReviewsLabel.text = "\(business.reviewCount) Reviews"
-            cell.restaurantName.text = business.name
-            cell.restaurantImage.image = business.generateImage()
+            cell.configureProperties(business: business, delegate: self, from: self)
 
-            cell.firstRatingIcon.image = #imageLiteral(resourceName: "19x19_0") //#imageLiteral(resourceName: "10x10_0")
-            cell.secondRatingIcon.image = #imageLiteral(resourceName: "19x19_0")
-            cell.thirdRatingIcon.image = #imageLiteral(resourceName: "19x19_0")
-            cell.fourthRatingIcon.image = #imageLiteral(resourceName: "19x19_0")
-            cell.fifthRatingIcon.image = #imageLiteral(resourceName: "19x19_0")
-
-            switch business.rating {
-            case 0.5:
-                cell.firstRatingIcon.image = #imageLiteral(resourceName: "10x10_1-5")
-            case 1:
-                cell.firstRatingIcon.image = #imageLiteral(resourceName: "10x10_1")
-            case 1.5:
-                cell.secondRatingIcon.image = #imageLiteral(resourceName: "10x10_1-5")
-                cell.firstRatingIcon.image = #imageLiteral(resourceName: "10x10_1")
-            case 2:
-                cell.secondRatingIcon.image = #imageLiteral(resourceName: "10x10_2")
-                cell.firstRatingIcon.image = #imageLiteral(resourceName: "10x10_2")
-            case 2.5:
-                cell.thirdRatingIcon.image = #imageLiteral(resourceName: "10x10_2-5")
-                cell.secondRatingIcon.image = #imageLiteral(resourceName: "10x10_2")
-                cell.firstRatingIcon.image = #imageLiteral(resourceName: "10x10_2")
-            case 3.0:
-                cell.thirdRatingIcon.image = #imageLiteral(resourceName: "10x10_3")
-                cell.secondRatingIcon.image = #imageLiteral(resourceName: "10x10_3")
-                cell.firstRatingIcon.image = #imageLiteral(resourceName: "10x10_3")
-            case 3.5:
-                cell.fourthRatingIcon.image = #imageLiteral(resourceName: "10x10_3-5")
-                cell.thirdRatingIcon.image = #imageLiteral(resourceName: "10x10_3")
-                cell.secondRatingIcon.image = #imageLiteral(resourceName: "10x10_3")
-                cell.firstRatingIcon.image = #imageLiteral(resourceName: "10x10_3")
-            case 4:
-                cell.fourthRatingIcon.image = #imageLiteral(resourceName: "19x19_4") //#imageLiteral(resourceName: "10x10_4")
-                cell.thirdRatingIcon.image = #imageLiteral(resourceName: "19x19_4")
-                cell.secondRatingIcon.image = #imageLiteral(resourceName: "19x19_4")
-                cell.firstRatingIcon.image = #imageLiteral(resourceName: "19x19_4")
-            case 4.5:
-                cell.fifthRatingIcon.image = #imageLiteral(resourceName: "219x19_4-5") //#imageLiteral(resourceName: "10x10_4-5")
-                cell.fourthRatingIcon.image = #imageLiteral(resourceName: "19x19_4")
-                cell.thirdRatingIcon.image = #imageLiteral(resourceName: "19x19_4")
-                cell.secondRatingIcon.image = #imageLiteral(resourceName: "19x19_4")
-                cell.firstRatingIcon.image = #imageLiteral(resourceName: "19x19_4")
-            case 5:
-                cell.firstRatingIcon.image = #imageLiteral(resourceName: "10x10_5")
-                cell.secondRatingIcon.image = #imageLiteral(resourceName: "10x10_5")
-                cell.thirdRatingIcon.image = #imageLiteral(resourceName: "10x10_5")
-                cell.fourthRatingIcon.image = #imageLiteral(resourceName: "10x10_5")
-                cell.fifthRatingIcon.image = #imageLiteral(resourceName: "10x10_5")
-            default: break
+            if let image = restaurantImages[indexPath.row] {
+                cell.restaurantImage.image = image
+            } else {
+                cell.restaurantImage.backgroundColor = UIColor.orange
             }
             return cell
-        default: return UITableViewCell()
         }
     }
 }
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0: return 44
-        case 1: return 86
-        default: return 44
+        if searchResults.isEmpty {
+            return 44
+        } else {
+            return 86
         }
     }
 
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if searchResults.isEmpty {
+            return 44
+        } else {
+            return 86
+        }
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let lastLocationUpdate = currentLocation?.timestamp,
             Date().timeIntervalSince(lastLocationUpdate) < 300,
@@ -212,6 +189,18 @@ extension SearchViewController: UITableViewDelegate {
             }
 
             self.searchResults = businesses
+            self.restaurantImages = Array(repeating: nil, count: self.searchResults.count)
+
+            DispatchQueue.global().async {
+            for (index, restaurant) in businesses.enumerated() {
+                let nextImage = restaurant.generateImage()
+                self.restaurantImages[index] = nextImage
+                DispatchQueue.main.async {
+                    self.searchResultsTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
+                }
+            }
+            }
+
             self.autocompleteSuggesions.removeAll()
 
             DispatchQueue.main.async {
@@ -221,9 +210,11 @@ extension SearchViewController: UITableViewDelegate {
         default: return
         }
     }
+
+    
 }
 
-extension SearchViewController: UISearchBarDelegate {
+extension SearchViewController: UISearchBarDelegate, UIGestureRecognizerDelegate {
     func getSuggestions(searchText: String) {
         guard let lastLocationUpdate = currentLocation?.timestamp,
             Date().timeIntervalSince(lastLocationUpdate) < 300,
@@ -246,7 +237,6 @@ extension SearchViewController: UISearchBarDelegate {
                     return
             }
             self.autocompleteSuggesions = suggestions
-            print(self.autocompleteSuggesions)
             DispatchQueue.main.async {
                 self.searchResultsTableView.reloadData()
             }
@@ -256,7 +246,8 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if !searchResults.isEmpty {
             searchResults.removeAll()
-            searchResultsTableView.reloadSections([1], with: .automatic)
+            restaurantImages.removeAll()
+            searchResultsTableView.reloadSections([0], with: .automatic)
         }
 
         if !searchText.isEmpty {
@@ -269,5 +260,66 @@ extension SearchViewController: UISearchBarDelegate {
             !searchText.isEmpty {
             getSuggestions(searchText: searchText)
         }
+    }
+
+    @IBAction func dismissKeyboardOnTap(sender: UITapGestureRecognizer) {
+        view.endEditing(true)
+
+        let numberOfTouches = sender.numberOfTouches
+        let touchPoint = sender.location(ofTouch: (numberOfTouches - 1), in: searchResultsTableView)
+
+        guard let indexPath = searchResultsTableView.indexPathForRow(at: touchPoint) else {
+            return
+        }
+        searchResultsTableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+        searchResultsTableView.delegate?.tableView!(searchResultsTableView, didSelectRowAt: indexPath)
+    }
+
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if searchBar.isFirstResponder {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+extension SearchViewController: SearchTableDelegate {
+    func addPressed(from cell: UITableViewCell) {
+        guard let indexPath = searchResultsTableView.indexPath(for: cell) else {
+            return
+        }
+
+        let business = searchResults[indexPath.row]
+        business.status = Status.wishlist.rawValue
+        StackSingleton.sharedInstance.stack?.save()
+    }
+
+    func yelpPressed(from cell: UITableViewCell) {
+        guard let indexPath = searchResultsTableView.indexPath(for: cell) else {
+            return
+        }
+
+        let siteUrl = searchResults[indexPath.row].yelpUrl
+        presentSite(urlString: siteUrl)
+    }
+}
+
+protocol SearchTableDelegate {
+    func addPressed(from cell: UITableViewCell)
+    func yelpPressed(from cell: UITableViewCell)
+    func presentSite(urlString: String?)
+}
+
+extension SearchTableDelegate {
+
+    func presentSite(urlString: String?) {
+        let urlString = urlString ?? "https://www.yelp.com"
+
+        guard let url = URL(string: urlString) else {
+            return
+        }
+
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 }
