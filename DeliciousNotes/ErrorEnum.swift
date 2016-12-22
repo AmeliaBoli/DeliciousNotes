@@ -8,11 +8,15 @@
 
 import Foundation
 
-enum Error {
+enum ErrorType {
     case inApp
     case jsonSerialization
     case malformedJson
     case storage
     case error(String)
+    case network
+    case noStatusCode
+    case notOkayStatusCode(Int)
+    case noData
 }
 

@@ -17,9 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let stack = StackSingleton.sharedInstance.stack
     let locationManager = CLLocationManager()
 
-    //var existingWishlistDataUpdated = false
-    //var existingVisitedDataUpdated = false
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         UIView.appearance().tintColor = UIColor(red: 0.3686, green: 0.0863, blue: 0.2353, alpha: 1)
         stack?.removeProprietaryData()

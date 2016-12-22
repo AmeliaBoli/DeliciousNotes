@@ -16,7 +16,7 @@ class YelpInterface {
     let token = YelpToken.sharedInstance
     let yelpService = YelpService.sharedInstance
 
-    func fetchAutocompleteSuggesions(searchText: String, latitude: Double, longitude: Double, completionHandlerForAutocomplete: @escaping ([[String: Any]]?, Error?) -> Void) {
+    func fetchAutocompleteSuggesions(searchText: String, latitude: Double, longitude: Double, completionHandlerForAutocomplete: @escaping ([[String: Any]]?, ErrorType?) -> Void) {
         if token.isValid() {
             yelpService.getAutocompleteSuggestions(searchText: searchText, latitude: latitude, longitude: longitude) { result, error in
                 guard error == nil,
@@ -54,7 +54,7 @@ class YelpInterface {
         }
     }
 
-    func fetchSearchResults(term: String?, category: String?, latitude: Double, longitude: Double, completionHandlerForAutocomplete: @escaping (_ businesses: [Business]?, _ error: Error?) -> Void) {
+    func fetchSearchResults(term: String?, category: String?, latitude: Double, longitude: Double, completionHandlerForAutocomplete: @escaping (_ businesses: [Business]?, _ error: ErrorType?) -> Void) {
         if token.isValid() {
             yelpService.search(byTerm: term, byCategory: category, latitude: latitude, longitude: longitude) { result, error in
                 guard error == nil,
@@ -92,7 +92,7 @@ class YelpInterface {
         }
     }
 
-    func fetchBusiness(businessId: String, completionHandlerForBusiness: @escaping ( _ success: Bool, _ error: Error?) -> Void) {
+    func fetchBusiness(businessId: String, completionHandlerForBusiness: @escaping ( _ success: Bool, _ error: ErrorType?) -> Void) {
         if token.isValid() {
             yelpService.getBusiness(businessId: businessId) { success, error in
                     guard error == nil,

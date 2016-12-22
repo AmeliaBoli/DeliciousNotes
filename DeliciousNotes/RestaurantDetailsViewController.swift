@@ -41,7 +41,6 @@ class RestaurantDetailsViewController: UIViewController {
             default: break
             }
         }
-        //visitedButton.tintColor
 
         restaurantNameLabel.text = restaurant.name
         restaurantAddressButton.titleLabel?.lineBreakMode = .byWordWrapping

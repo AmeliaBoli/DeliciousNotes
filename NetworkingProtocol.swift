@@ -10,9 +10,8 @@ import UIKit
 
 protocol Networking {
     func urlFromComponents(scheme: String, host: String, path: String?, withPathExtension: String?, parameters: [String: Any]?) -> URL?
-    func taskForHTTPMethod(request: URLRequest, completionHandlerForMethod: @escaping (_ result: Data?, _ error: NSError?) -> Void) -> URLSessionDataTask
-    func deserializeJSONWithCompletionHandler(data: Data, completionHandlerForDeserializeJSON: (_ result: Any?, _ error: Error?) -> Void)
-    func sendError(error: String, domain: String, code: Int, completionHandlerForSendError: (_ result: Data?, _ error: NSError?) -> Void)
+    func taskForHTTPMethod(request: URLRequest, completionHandlerForMethod: @escaping (_ result: Data?, _ error: ErrorType?) -> Void) -> URLSessionDataTask
+    func deserializeJSONWithCompletionHandler(data: Data, completionHandlerForDeserializeJSON: (_ result: Any?, _ error: ErrorType?) -> Void)
     func toggleNetworkIndicator(turnOn: Bool)
 }
 
@@ -47,44 +46,36 @@ extension Networking {
         return url
     }
 
-    func taskForHTTPMethod(request: URLRequest, completionHandlerForMethod: @escaping (_ result: Data?, _ error: NSError?) -> Void) -> URLSessionDataTask {
+    func taskForHTTPMethod(request: URLRequest, completionHandlerForMethod: @escaping (_ result: Data?, _ error: ErrorType?) -> Void) -> URLSessionDataTask {
 
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { (data, response, receivedError) in
 
             self.toggleNetworkIndicator(turnOn: false)
 
-            let domain = "taskForHTTPMethod"
-
             /* GUARD: Was there an error? */
-            guard error == nil else {
-                var errorString = "There was an error with your request: \(error)"
-                if (error! as NSError).code == -1009 {
-                    errorString = "We couldn't log you in. There seems to be a problem with your network connection."
+            guard receivedError == nil else {
+                var errorToPass = ErrorType.error((receivedError!.localizedDescription))
+                if (receivedError! as NSError).code == -1009 {
+                    errorToPass = ErrorType.network
                 }
-                self.sendError(error: errorString, domain: domain, code: -1009, completionHandlerForSendError: completionHandlerForMethod)
+                completionHandlerForMethod(nil, errorToPass)
                 return
             }
 
             /* GUARD: Did we get a successful 2XX response? */
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
-                self.sendError(error: "There seems to be no status code", domain: domain, code: 1, completionHandlerForSendError: completionHandlerForMethod)
+                completionHandlerForMethod(nil, .noStatusCode)
                 return
             }
 
             guard statusCode >= 200 && statusCode <= 299 else {
-                var errorString = "Your request returned a status code other than 2xx!: \(statusCode)"
-
-                if statusCode == 403 {
-                    errorString = "We couldn't log you in. Your username or password seem incorrect."
-                }
-
-                self.sendError(error: errorString, domain: domain, code: 1, completionHandlerForSendError: completionHandlerForMethod)
+                completionHandlerForMethod(nil, .notOkayStatusCode(statusCode))
                 return
             }
 
             /* GUARD: Was there any data returned? */
             guard let data = data else {
-                self.sendError(error: "No data was returned by the request!", domain: domain, code: 1, completionHandlerForSendError: completionHandlerForMethod)
+                completionHandlerForMethod(nil, .noData)
                 return
             }
 
@@ -96,7 +87,7 @@ extension Networking {
         return task
     }
 
-    func deserializeJSONWithCompletionHandler(data: Data, completionHandlerForDeserializeJSON: (_ result: Any?, _ error: Error?) -> Void) {
+    func deserializeJSONWithCompletionHandler(data: Data, completionHandlerForDeserializeJSON: (_ result: Any?, _ error: ErrorType?) -> Void) {
         var parsedData: Any?
 
         do {
@@ -108,15 +99,6 @@ extension Networking {
     }
 
     // MARK: Extension Helpers
-    func sendError(error: String, domain: String, code: Int, completionHandlerForSendError: (_ result: Data?, _ error: NSError?) -> Void) {
-        #if DEBUG
-            print(error)
-        #endif
-        let userInfo = [NSLocalizedDescriptionKey : error]
-        let nsError = NSError(domain: domain, code: code, userInfo: userInfo)
-        completionHandlerForSendError(nil, nsError)
-    }
-
     func toggleNetworkIndicator(turnOn: Bool) {
         let application = UIApplication.shared
 

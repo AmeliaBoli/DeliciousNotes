@@ -95,31 +95,6 @@ extension Business {
         return categoriesString
     }
 
-    // Creates the image that should be associated with the restaurant
-    func generateImage() -> UIImage? {
-        guard let photoUrl = imageUrl,
-                let url = URL(string: photoUrl) else {
-                    #if DEBUG
-                        print("There was a problem creating the url from \(imageUrl)")
-                    #endif
-                    return nil
-            }
-
-            var imageData: NSData? = nil
-
-            do {
-                imageData = try NSData(contentsOf: url, options: .mappedIfSafe)
-            } catch {
-                #if DEBUG
-                    print("There was a problem fetching the data from the image url: \(url). Error: \(error)")
-                #endif
-                return nil
-            }
-            
-        let image = UIImage(data: imageData as! Data)
-        return image
-    }
-
     // Update
     func update(dictionary: [String: Any], context: NSManagedObjectContext) -> Bool {
         guard let name = dictionary["name"] as? String,

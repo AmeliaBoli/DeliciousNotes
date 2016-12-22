@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class RestaurantListViewController: UIViewController, UITabBarControllerDelegate {
+class RestaurantListViewController: UIViewController, UITabBarControllerDelegate, AlertDelegate {
 
     @IBOutlet weak var restaurantTableView: CoreDataTableView!
     @IBOutlet weak var sortingSegmentedControl: UISegmentedControl!
@@ -61,7 +61,7 @@ class RestaurantListViewController: UIViewController, UITabBarControllerDelegate
             self.restaurantImages = Array(repeating: ["id": nil, "image": nil], count: numberOfRestaurants)
         }
 
-        fetchBusinessData()
+        //fetchBusinessData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -105,11 +105,16 @@ class RestaurantListViewController: UIViewController, UITabBarControllerDelegate
                             #if DEBUG
                                 print("There was a problem retrieving business \(businessId): \(error)")
                             #endif
+                            DispatchQueue.main.async {
+                                if let error = error {
+                                    self.present(self.createNetworkingAlert(error: error), animated: true, completion: nil)
+                                }
+                            }
                             return
                     }
-                    DispatchQueue.global().async {
-                        self.fetchBusinessImages()
-                    }
+                  //  DispatchQueue.global(qos: .background).async {
+                    self.fetchBusinessImages()
+                //    }
                 }
             }
         }
@@ -121,19 +126,38 @@ class RestaurantListViewController: UIViewController, UITabBarControllerDelegate
         }
 
         for (index, restaurant) in businesses.enumerated() {
-            let nextImage = restaurant.generateImage()
-            if index >= self.restaurantImages.count {
-                self.restaurantImages.append(["id": restaurant.id, "image": nextImage])
-            } else {
-                self.restaurantImages[index]["id"] = restaurant.id
-                self.restaurantImages[index]["image"] = nextImage
+            var businessToRead: Business? = nil
+
+            restaurantTableView.fetchedResultsController?.managedObjectContext.perform {
+                businessToRead = restaurant
             }
-            DispatchQueue.main.async {
-                if let businessIndex = self.restaurantTableView.fetchedResultsController?.indexPath(forObject: restaurant) {
-                    self.restaurantTableView.reloadRows(at: [businessIndex], with: .none)
+
+            guard let business = businessToRead else {
+                return
+            }
+
+     //       DispatchQueue.global(qos: .background).async {
+                let image = ImageFetcher.generateImage(imageUrl: business.yelpUrl)
+
+                guard let nextImage = image else {
+                    return
+                }
+
+                if index >= self.restaurantImages.count {
+                    self.restaurantImages.append(["id": business.id, "image": nextImage])
+                } else {
+                    print("Array element: \(self.restaurantImages[index])")
+                    print("Restaurant: \(business)")
+                    self.restaurantImages[index]["id"] = business.id
+                    self.restaurantImages[index]["image"] = nextImage
+                }
+                DispatchQueue.main.async {
+                    if let businessIndex = self.restaurantTableView.fetchedResultsController?.indexPath(forObject: business) {
+                        self.restaurantTableView.reloadRows(at: [businessIndex], with: .none)
+                    }
                 }
             }
-        }
+    //}
     }
 
     @IBAction func filterChanged(_ sender: UISegmentedControl) {

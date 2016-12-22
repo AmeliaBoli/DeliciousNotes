@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 import CoreData
 
-class SearchViewController: UIViewController, UITabBarControllerDelegate {
+class SearchViewController: UIViewController, UITabBarControllerDelegate, AlertDelegate {
 
     @IBOutlet weak var searchResultsTableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -97,7 +97,7 @@ extension SearchViewController: CLLocationManagerDelegate {
         }
     }
 
-    private func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    internal func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         #if DEBUG
             print("Location manager did fail with error: \(error)")
         #endif
@@ -204,9 +204,11 @@ extension SearchViewController: UITableViewDelegate {
 
                 guard let businesses = businesses,
                     error == nil else {
-                        print(error)
                         DispatchQueue.main.async {
                             self.centerActivityIndicator.stopAnimating()
+                            if let error = error {
+                                self.present(self.createNetworkingAlert(error: error), animated: true, completion: nil)
+                            }
                         }
                         return
                 }
@@ -214,9 +216,9 @@ extension SearchViewController: UITableViewDelegate {
                 self.searchResults = businesses
                 self.restaurantImages = Array(repeating: nil, count: self.searchResults.count)
 
-                DispatchQueue.global().async {
+                DispatchQueue.global(qos: .background).async {
                     for (index, restaurant) in businesses.enumerated() {
-                        if let nextImage = restaurant.generateImage() {
+                        if let nextImage = ImageFetcher.generateImage(imageUrl: restaurant.imageUrl) {
                             self.restaurantImages[index] = nextImage
                         } else {
                             restaurant.noFoundImage = true
@@ -258,6 +260,9 @@ extension SearchViewController: UISearchBarDelegate, UIGestureRecognizerDelegate
                     #endif
                     DispatchQueue.main.async {
                         self.centerActivityIndicator.stopAnimating()
+                        if let error = error {
+                            self.present(self.createNetworkingAlert(error: error), animated: true, completion: nil)
+                        }
                     }
                     return
             }

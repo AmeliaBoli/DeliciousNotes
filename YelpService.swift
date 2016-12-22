@@ -68,33 +68,34 @@ class YelpService: Networking {
             let businessFetch: NSFetchRequest<Business> = Business.fetchRequest()
             businessFetch.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
 
-            do {
-                let existingBusinesses = try self.stack.context.fetch(businessFetch)
-                if let firstBusiness = existingBusinesses.first {
-                    if firstBusiness.update(dictionary: dictionary, context: self.stack.context) {
-                        return firstBusiness
+            var businessToReturn: Business? = nil
+        //    stack.context.perform {
+                do {
+                    let existingBusinesses = try self.stack.context.fetch(businessFetch)
+                    if let firstBusiness = existingBusinesses.first {
+                        if firstBusiness.update(dictionary: dictionary, context: self.stack.context) {
+                            businessToReturn = firstBusiness
+                        } else {
+                            #if DEBUG
+                                print("There was a problem updating existing business: \(firstBusiness) with properties \(dictionary)")
+                            #endif
+                        }
                     } else {
-                        #if DEBUG
-                            print("There was a problem updating existing business: \(firstBusiness) with properties \(dictionary)")
-                        #endif
-                        return nil
+                        if let newBusiness = Business(dictionary: dictionary, status: .search, context: self.stack.context) {
+                            businessToReturn = newBusiness
+                        } else {
+                            #if DEBUG
+                                print("A business could not be completed with \(dictionary)")
+                            #endif
+                        }
                     }
-                } else {
-                    if let newBusiness = Business(dictionary: dictionary, status: .search, context: self.stack.context) {
-                        return newBusiness
-                    } else {
-                        #if DEBUG
-                            print("A business could not be completed with \(dictionary)")
-                        #endif
-                        return nil
-                    }
+                } catch {
+                    #if DEBUG
+                        print("There was a problem fetching businesses for autocomplete: \(error)")
+                    #endif
                 }
-            } catch {
-                #if DEBUG
-                    print("There was a problem fetching businesses for autocomplete: \(error)")
-                #endif
-                return nil
-            }
+          //  }
+            return businessToReturn
         } else {
             #if DEBUG
                 print("There was no id in \(dictionary)")
@@ -104,7 +105,7 @@ class YelpService: Networking {
     }
 
     // GET CALLS
-    func getAutocompleteSuggestions(searchText: String, latitude: Double, longitude: Double, completionHandlerForAutocomplete: @escaping (_ suggestions: [[String: Any]]?, _ error: Error?) -> Void) {
+    func getAutocompleteSuggestions(searchText: String, latitude: Double, longitude: Double, completionHandlerForAutocomplete: @escaping (_ suggestions: [[String: Any]]?, _ error: ErrorType?) -> Void) {
 
         let parameters: [String :Any] = [ParameterKeys.Text: searchText,
                                          ParameterKeys.Latitude: latitude,
@@ -112,17 +113,20 @@ class YelpService: Networking {
 
         _ = getMethod(parameters: parameters, path: Constants.SearchPath, pathExtension: Methods.AutoComplete) { result, error in
 
-            guard error == nil,
-                let dictionary = result,
+            guard error == nil else {
+                completionHandlerForAutocomplete(nil, error!)
+                return
+            }
+
+            guard let dictionary = result,
                 let formattedTerms = dictionary["terms"] as? [[String: String]],
                 let formattedCategories = dictionary["categories"] as? [[String: String]],
                 let formattedBusinesses = dictionary["businesses"] as? [[String: String]] else {
-                    // TODO: flush this out more
                     completionHandlerForAutocomplete(nil, .malformedJson)
                     return
             }
 
-            var suggestions = [[String: Any]]() //AutocompleteSuggestion()
+            var suggestions = [[String: Any]]()
 
             for term in formattedTerms {
                 if let termToAdd = term["text"] {
@@ -151,7 +155,7 @@ class YelpService: Networking {
         }
     }
 
-    func search(byTerm term: String?, byCategory category: String?, latitude: Double, longitude: Double, completionHandlerForSearch: @escaping (_ businesses: [Business]?, _ error: Error?) -> Void) {
+    func search(byTerm term: String?, byCategory category: String?, latitude: Double, longitude: Double, completionHandlerForSearch: @escaping (_ businesses: [Business]?, _ error: ErrorType?) -> Void) {
 
         var parameters: [String: Any] = [ParameterKeys.Latitude: latitude,
                                          ParameterKeys.Longitude: longitude]
@@ -163,8 +167,12 @@ class YelpService: Networking {
         }
 
         _ = getMethod(parameters: parameters, path: Constants.SearchPath, pathExtension: Methods.Search) { result, error in
-            guard error == nil,
-                let dictionary = result,
+            guard error == nil else {
+                completionHandlerForSearch(nil, error)
+                return
+            }
+
+            guard let dictionary = result,
                 let businesses = dictionary["businesses"] as? [[String: Any]] else {
                     completionHandlerForSearch(nil, .malformedJson)
                     return
@@ -182,12 +190,16 @@ class YelpService: Networking {
         }
     }
 
-    func getBusiness(businessId: String, completionHandlerForGetBusiness: @escaping (_ success: Bool, _ error: Error?) -> Void) {
+    func getBusiness(businessId: String, completionHandlerForGetBusiness: @escaping (_ success: Bool, _ error: ErrorType?) -> Void) {
 
         let pathExtension = Methods.Businesses + "/" + businessId
         _ = getMethod(parameters: [:], path: Constants.SearchPath, pathExtension: pathExtension) { result, error in
-            guard error == nil,
-                let businessDictionary = result else {
+            guard error == nil else {
+                completionHandlerForGetBusiness(false, error)
+                return
+            }
+
+            guard let businessDictionary = result else {
                     completionHandlerForGetBusiness(false, .malformedJson)
                     return
             }
@@ -201,7 +213,7 @@ class YelpService: Networking {
     }
 
     // GET Method
-    func getMethod(parameters: [String: Any], path: String, pathExtension: String, completionHandlerForGet: @escaping (_ result: [String: Any]?, _ error: Error?) -> Void) {
+    func getMethod(parameters: [String: Any], path: String, pathExtension: String, completionHandlerForGet: @escaping (_ result: [String: Any]?, _ error: ErrorType?) -> Void) {
 
         guard let url = urlFromComponents(scheme: Constants.Scheme, host: Constants.Host, path: path, withPathExtension: pathExtension, parameters: parameters) else {
             #if DEBUG
@@ -214,14 +226,14 @@ class YelpService: Networking {
         request.addValue("Bearer \(token.getTokenId())", forHTTPHeaderField: "Authorization")
 
         _ = taskForHTTPMethod(request: request) { result, error in
-            guard error == nil,
-                let data = result else {
-                    var completionError = Error.inApp
-                    if let error = error {
-                        completionError = .error(error.localizedDescription)
-                    }
-                    completionHandlerForGet(nil, completionError)
-                    return
+            guard error == nil else {
+                completionHandlerForGet(nil, error)
+                return
+            }
+
+            guard let data = result else {
+                completionHandlerForGet(nil, .inApp)
+                return
             }
 
             self.deserializeJSONWithCompletionHandler(data: data) { result, error in
@@ -236,9 +248,9 @@ class YelpService: Networking {
     }
 
     // POST Calls
-    func getToken(completionHandlerForGetToken: @escaping (_ success: Bool, _ error: Error?) -> Void) {
+    func getToken(completionHandlerForGetToken: @escaping (_ success: Bool, _ error: ErrorType?) -> Void) {
 
-        guard let url = urlFromComponents(scheme: Constants.Scheme, host: Constants.Host, path: Methods.OAuth, withPathExtension: nil, parameters: nil) else {
+        guard let url = urlFromComponents(scheme: Constants.Scheme, host: Constants.Host, path: Methods.OAuth, withPathExtension: nil, parameters: nil) else { 
             #if DEBUG
                 print("There was a problem creating the url to get the token")
             #endif
@@ -256,14 +268,14 @@ class YelpService: Networking {
         request.httpBody = bodyData
 
         _ = taskForHTTPMethod(request: request) { result, error in
-            guard error == nil,
-                let data = result else {
-                    var completionError = Error.inApp
-                    if let error = error {
-                        completionError = .error(error.localizedDescription)
-                    }
-                    completionHandlerForGetToken(false, completionError)
-                    return
+            guard error == nil else {
+                completionHandlerForGetToken(false, error)
+                return
+            }
+
+            guard let data = result else {
+                completionHandlerForGetToken(false, .inApp)
+                return
             }
 
             self.deserializeJSONWithCompletionHandler(data: data) { result, error in
