@@ -8,57 +8,82 @@
 
 import UIKit
 
-class YelpRating {
-    static func ratingImages(rating: Double) -> [UIImage] {
+class Rating {
+    static func ratingImages(rating: Double, isUserRating: Bool, isLargeIcons: Bool) -> [UIImage] {
 
-        var firstImage = #imageLiteral(resourceName: "19x19_0")
-        var secondImage = #imageLiteral(resourceName: "19x19_0")
-        var thirdImage = #imageLiteral(resourceName: "19x19_0")
-        var fourthImage = #imageLiteral(resourceName: "19x19_0")
-        var fifthImage = #imageLiteral(resourceName: "19x19_0")
+        var zeroStar = #imageLiteral(resourceName: "20x20_0")
+        var oneStar = #imageLiteral(resourceName: "20x20_1")
+        var oneHalfStar = #imageLiteral(resourceName: "20x20_1-5")
+        var twoStar = #imageLiteral(resourceName: "20x20_2")
+        var twoHalfStar = #imageLiteral(resourceName: "20x20_2-5")
+        var threeStar = #imageLiteral(resourceName: "20x20_3")
+        var threeHalfStar = #imageLiteral(resourceName: "20x20_3-5")
+        var fourStar = #imageLiteral(resourceName: "20x20_4")
+        var fourHalfStar = #imageLiteral(resourceName: "20x20_4-5")
+        var fiveStar = #imageLiteral(resourceName: "20x20_5")
+
+        if isUserRating {
+            zeroStar =      isLargeIcons ? #imageLiteral(resourceName: "ZeroFork32")        : #imageLiteral(resourceName: "ZeroFork20")
+            oneStar =       isLargeIcons ? #imageLiteral(resourceName: "OneFork32")         : #imageLiteral(resourceName: "OneFork20")
+            oneHalfStar =   isLargeIcons ? #imageLiteral(resourceName: "OneHalfFork32")     : #imageLiteral(resourceName: "OneHalfFork20")
+            twoStar =       isLargeIcons ? #imageLiteral(resourceName: "TwoFork32")         : #imageLiteral(resourceName: "TwoFork20")
+            twoHalfStar =   isLargeIcons ? #imageLiteral(resourceName: "TwoHalfFork32")     : #imageLiteral(resourceName: "TwoHalfFork20")
+            threeStar =     isLargeIcons ? #imageLiteral(resourceName: "ThreeFork32")       : #imageLiteral(resourceName: "ThreeFork20")
+            threeHalfStar = isLargeIcons ? #imageLiteral(resourceName: "ThreeHalfFork32")   : #imageLiteral(resourceName: "ThreeHalfFork20")
+            fourStar =      isLargeIcons ? #imageLiteral(resourceName: "FourFork32")        : #imageLiteral(resourceName: "FourFork20")
+            fourHalfStar =  isLargeIcons ? #imageLiteral(resourceName: "FourHalfFork32")    : #imageLiteral(resourceName: "FourFork20")
+            fiveStar =      isLargeIcons ? #imageLiteral(resourceName: "FiveFork32")        : #imageLiteral(resourceName: "FiveFork20")
+
+        }
+
+        var firstImage = zeroStar
+        var secondImage = zeroStar
+        var thirdImage = zeroStar
+        var fourthImage = zeroStar
+        var fifthImage = zeroStar
 
         switch rating {
-        case 0.5:
-            firstImage = #imageLiteral(resourceName: "19x19_1-5")
-        case 1:
-            firstImage = #imageLiteral(resourceName: "219x19_1")
-        case 1.5:
-            secondImage = #imageLiteral(resourceName: "19x19_1-5")
-            firstImage = #imageLiteral(resourceName: "219x19_1")
-        case 2:
-            secondImage = #imageLiteral(resourceName: "19x19_2")
-            firstImage = #imageLiteral(resourceName: "19x19_2")
-        case 2.5:
-            thirdImage = #imageLiteral(resourceName: "19x19_2-5")
-            secondImage = #imageLiteral(resourceName: "19x19_2")
-            firstImage = #imageLiteral(resourceName: "19x19_2")
-        case 3.0:
-            thirdImage = #imageLiteral(resourceName: "19x19_3")
-            secondImage = #imageLiteral(resourceName: "19x19_3")
-            firstImage = #imageLiteral(resourceName: "19x19_3")
-        case 3.5:
-            fourthImage = #imageLiteral(resourceName: "19x19_3-5")
-            thirdImage = #imageLiteral(resourceName: "19x19_3")
-            secondImage = #imageLiteral(resourceName: "19x19_3")
-            firstImage = #imageLiteral(resourceName: "19x19_3")
-        case 4:
-            fourthImage = #imageLiteral(resourceName: "19x19_4")
-            thirdImage = #imageLiteral(resourceName: "19x19_4")
-            secondImage = #imageLiteral(resourceName: "19x19_4")
-            firstImage = #imageLiteral(resourceName: "19x19_4")
-        case 4.5:
-            fifthImage = #imageLiteral(resourceName: "219x19_4-5")
-            fourthImage = #imageLiteral(resourceName: "19x19_4")
-            thirdImage = #imageLiteral(resourceName: "19x19_4")
-            secondImage = #imageLiteral(resourceName: "19x19_4")
-            firstImage = #imageLiteral(resourceName: "19x19_4")
+        case 0.5..<1:
+            firstImage = oneHalfStar
+        case 1..<1.5:
+            firstImage = oneStar
+        case 1.5..<2:
+            secondImage = oneHalfStar
+            firstImage = oneStar
+        case 2..<2.5:
+            secondImage = twoStar
+            firstImage = twoStar
+        case 2.5..<3:
+            thirdImage = twoHalfStar
+            secondImage = twoStar
+            firstImage = twoStar
+        case 3.0..<3.5:
+            thirdImage = threeStar
+            secondImage = threeStar
+            firstImage = threeStar
+        case 3.5..<4:
+            fourthImage = threeHalfStar
+            thirdImage = threeStar
+            secondImage = threeStar
+            firstImage = threeStar
+        case 4..<4.5:
+            fourthImage = fourStar
+            thirdImage = fourStar
+            secondImage = fourStar
+            firstImage = fourStar
+        case 4.5..<5:
+            fifthImage = fourHalfStar
+            fourthImage = fourStar
+            thirdImage = fourStar
+            secondImage = fourStar
+            firstImage = fourStar
         case 5:
-            firstImage = #imageLiteral(resourceName: "19x19_5")
-            secondImage = #imageLiteral(resourceName: "19x19_5")
-            thirdImage = #imageLiteral(resourceName: "19x19_5")
-            fourthImage = #imageLiteral(resourceName: "19x19_5")
-            fifthImage = #imageLiteral(resourceName: "19x19_5")
-        default: return [firstImage, secondImage, thirdImage, fourthImage, fifthImage]
+            firstImage = fiveStar
+            secondImage = fiveStar
+            thirdImage = fiveStar
+            fourthImage = fiveStar
+            fifthImage = fiveStar
+        default: break
         }
 
         return [firstImage, secondImage, thirdImage, fourthImage, fifthImage]

@@ -23,10 +23,6 @@ class Sort {
     var visited: SortCategory = .rating
     var wishlist: SortCategory = .rating
 
-    static func retrieveSortPreferences() {
-
-    }
-
     func save(category: SortCategory, for status: Status) {
         let preference = ["category": category.rawValue]
         userDefaults.set(preference, forKey: status.rawValue)

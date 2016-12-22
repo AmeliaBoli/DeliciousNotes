@@ -24,13 +24,25 @@ class RestaurantDetailsViewController: UIViewController {
     @IBOutlet weak var numberOfRatings: UILabel!
 
     var restaurant: Business!
-    var image: UIImage!
-    
+    var image: UIImage?
+
+    let switchWishlistImage = UIImage(named: "switch wishlist")?.withRenderingMode(.alwaysTemplate)
+    let switchVisitedImage = UIImage(named: "switch visited")?.withRenderingMode(.alwaysTemplate)
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        restaurantImageView.image = image
-        visitedButton.setTitle(restaurant.status, for: .normal)
+        restaurantImageView.image = image ?? #imageLiteral(resourceName: "Large Placeholder")
+
+        if let status = restaurant.status {
+            switch Status(rawValue: status) {
+            case .some(.visited): visitedButton.setImage(switchWishlistImage, for: .normal)
+            case .some(.wishlist): visitedButton.setImage(switchVisitedImage, for: .normal)
+            default: break
+            }
+        }
+        //visitedButton.tintColor
+
         restaurantNameLabel.text = restaurant.name
         restaurantAddressButton.titleLabel?.lineBreakMode = .byWordWrapping
         restaurantAddressButton.titleLabel?.textAlignment = .center
@@ -52,32 +64,41 @@ class RestaurantDetailsViewController: UIViewController {
 
         restaurantCategoriesLabel.text = restaurant.categories
 
-        if restaurant.userRatingWasSet {
-            print("UserRatingWasSet")
-        } else {
-            let restaurantRatingImages = YelpRating.ratingImages(rating: restaurant.yelpRating)
-            rating1ImageView.image = restaurantRatingImages[0]
-            rating2ImageView.image = restaurantRatingImages[1]
-            rating3ImageView.image = restaurantRatingImages[2]
-            rating4ImageView.image = restaurantRatingImages[3]
-            rating5ImageView.image = restaurantRatingImages[4]
-        }
-        numberOfRatings.text = "\(restaurant.reviewCount) Reviews"
+        loadRatingImages()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
-    
+
+    func loadRatingImages() {
+        var restaurantRatingImages = [UIImage]()
+
+        if restaurant.userRatingWasSet {
+            restaurantRatingImages = Rating.ratingImages(rating: restaurant.userRating, isUserRating: true, isLargeIcons: false)
+            numberOfRatings.isHidden = true
+        } else {
+            restaurantRatingImages = Rating.ratingImages(rating: restaurant.yelpRating, isUserRating: false, isLargeIcons: false)
+            numberOfRatings.isHidden = false
+            numberOfRatings.text = "\(restaurant.reviewCount) Reviews"
+        }
+        rating1ImageView.image = restaurantRatingImages[0]
+        rating2ImageView.image = restaurantRatingImages[1]
+        rating3ImageView.image = restaurantRatingImages[2]
+        rating4ImageView.image = restaurantRatingImages[3]
+        rating5ImageView.image = restaurantRatingImages[4]
+    }
+
     @IBAction func visitedButtonPressed(_ sender: UIButton) {
         if let statusString = restaurant.status {
             if Status(rawValue: statusString) == .visited {
                 restaurant.status = Status.wishlist.rawValue
+                visitedButton.setImage(switchVisitedImage, for: .normal)
             } else if Status(rawValue: statusString) == .wishlist {
                 restaurant.status = Status.visited.rawValue
+                visitedButton.setImage(switchWishlistImage, for: .normal)
             }
-        visitedButton.setTitle(restaurant.status, for: .normal)
         }
     }
 
@@ -118,6 +139,6 @@ class RestaurantDetailsViewController: UIViewController {
     }
 
     @IBAction func prepareForUnwind(segue: UIStoryboardSegue) {
-
+        loadRatingImages()
     }
 }

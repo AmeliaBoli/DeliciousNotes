@@ -16,6 +16,7 @@ enum Status: String {
 }
 
 extension Business {
+    // Init
     convenience init?(dictionary: [String: Any], status: Status, context: NSManagedObjectContext) {
         self.init(context: context)
 
@@ -75,6 +76,7 @@ extension Business {
         self.addToCategory(categoriesToSave as NSSet)
     }
 
+    // Creates a string of all associated categories in a comma separated list
     var categories: String {
         var categoriesString = ""
 
@@ -93,6 +95,7 @@ extension Business {
         return categoriesString
     }
 
+    // Creates the image that should be associated with the restaurant
     func generateImage() -> UIImage? {
         guard let photoUrl = imageUrl,
                 let url = URL(string: photoUrl) else {
@@ -117,6 +120,7 @@ extension Business {
         return image
     }
 
+    // Update
     func update(dictionary: [String: Any], context: NSManagedObjectContext) -> Bool {
         guard let name = dictionary["name"] as? String,
             let phone = dictionary["phone"] as? String,
@@ -165,16 +169,21 @@ extension Business {
         return true
     }
 
+    // Creates a formatted phone number
     func displayPhone() -> String {
-        guard var phone = self.phone else {
+        guard var phone = self.phone,
+            phone.characters.count == 12 else {
             return ""
         }
 
         phone.removeSubrange(phone.startIndex...phone.index(phone.startIndex, offsetBy: 1))
         phone.insert("(", at: phone.startIndex)
+
         let areaCodeEndCharacters = (") ").characters
         phone.insert(contentsOf: areaCodeEndCharacters, at: phone.index(phone.startIndex, offsetBy: 4))
+
         phone.insert("-", at: phone.index(phone.startIndex, offsetBy: 9))
+
         return phone
     }
 }

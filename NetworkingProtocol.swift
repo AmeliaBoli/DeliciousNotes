@@ -9,7 +9,6 @@
 import UIKit
 
 protocol Networking {
-    func substituteKeyInMethod(method: String, key: String, value: String) -> String?
     func urlFromComponents(scheme: String, host: String, path: String?, withPathExtension: String?, parameters: [String: Any]?) -> URL?
     func taskForHTTPMethod(request: URLRequest, completionHandlerForMethod: @escaping (_ result: Data?, _ error: NSError?) -> Void) -> URLSessionDataTask
     func deserializeJSONWithCompletionHandler(data: Data, completionHandlerForDeserializeJSON: (_ result: Any?, _ error: Error?) -> Void)
@@ -19,14 +18,6 @@ protocol Networking {
 
 extension Networking {
     // MARK: Protocol Methods
-    func substituteKeyInMethod(method: String, key: String, value: String) -> String? {
-        if method.range(of: "{\(key)}") != nil {
-            return method.replacingOccurrences(of: "{\(key)}", with: value)
-        } else {
-            return nil
-        }
-    }
-
     func urlFromComponents(scheme: String, host: String, path: String?, withPathExtension: String?, parameters: [String: Any]?) -> URL? {
 
         let components = NSURLComponents()
@@ -111,8 +102,7 @@ extension Networking {
         do {
             parsedData = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
         } catch {
-            completionHandlerForDeserializeJSON(nil, .inApp)
-            //sendError(error: "There is an error deserializing the JSON file", domain: "deserializeJSON", code: 2, completionHandlerForSendError: completionHandlerForDeserializeJSON)
+            completionHandlerForDeserializeJSON(nil, .jsonSerialization)
         }
         completionHandlerForDeserializeJSON(parsedData, nil)
     }
@@ -137,20 +127,3 @@ extension Networking {
         }
     }
 }
-
-enum ErrorCode: Int {
-    case networking = 1
-    case inApp = 2
-    case noPlaceId = 3
-    case connection = -1009
-
-    var userMessage: String {
-        switch self {
-        case .networking: return "There was a problem connecting with Flickr"
-        case .inApp: return "There was an internal error"
-        case .connection: return "There seems to be a problem with your network connection"
-        case .noPlaceId: return "Flickr has no photos for that location"
-        }
-    }
-}
-

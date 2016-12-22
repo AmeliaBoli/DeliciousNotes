@@ -12,15 +12,10 @@ class RatingViewController: UIViewController {
 
     @IBOutlet weak var restaurantNameLabel: UILabel!
     @IBOutlet weak var ratingImageView1a: UIImageView!
-    @IBOutlet weak var ratingImageView1b: UIImageView!
     @IBOutlet weak var ratingImageView2a: UIImageView!
-    @IBOutlet weak var ratingImageView2b: UIImageView!
     @IBOutlet weak var ratingImageView3a: UIImageView!
-    @IBOutlet weak var ratingImageView3b: UIImageView!
     @IBOutlet weak var ratingImageView4a: UIImageView!
-    @IBOutlet weak var ratingImageView4b: UIImageView!
     @IBOutlet weak var ratingImageView5a: UIImageView!
-    @IBOutlet weak var ratingImageView5b: UIImageView!
     @IBOutlet weak var ratingSlider: UISlider!
 
     var restaurant: Business!
@@ -40,18 +35,13 @@ class RatingViewController: UIViewController {
     }
 
     func setRatingImageViews() {
-        let imageColors = UserRating.ratingImages(rating: restaurant.userRating)
+        let imageColors = Rating.ratingImages(rating: restaurant.userRating, isUserRating: true, isLargeIcons: true)
 
-        ratingImageView1a.backgroundColor = imageColors[0]
-        ratingImageView1b.backgroundColor = imageColors[1]
-        ratingImageView2a.backgroundColor = imageColors[2]
-        ratingImageView2b.backgroundColor = imageColors[3]
-        ratingImageView3a.backgroundColor = imageColors[4]
-        ratingImageView3b.backgroundColor = imageColors[5]
-        ratingImageView4a.backgroundColor = imageColors[6]
-        ratingImageView4b.backgroundColor = imageColors[7]
-        ratingImageView5a.backgroundColor = imageColors[8]
-        ratingImageView5b.backgroundColor = imageColors[9]
+        ratingImageView1a.image = imageColors[0]
+        ratingImageView2a.image = imageColors[1]
+        ratingImageView3a.image = imageColors[2]
+        ratingImageView4a.image = imageColors[3]
+        ratingImageView5a.image = imageColors[4]
     }
 
     @IBAction func sliderChanged(_ sender: UISlider) {

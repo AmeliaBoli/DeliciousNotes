@@ -54,6 +54,7 @@ struct CoreDataStack {
         // create a context and add connect it to the coordinator
         persistingContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         persistingContext.persistentStoreCoordinator = coordinator
+        persistingContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
 
         context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         context.parent = persistingContext
@@ -99,6 +100,45 @@ extension CoreDataStack  {
 
         try coordinator.destroyPersistentStore(at: dbURL, ofType:NSSQLiteStoreType , options: nil)
         try addStoreCoordinator(storeType: NSSQLiteStoreType, configuration: nil, storeURL: dbURL, options: nil)
+    }
+
+    // Removes that non-transient properties, and all other entities, that are directly from Yelp
+    func removeProprietaryData() {
+        let businessFR: NSFetchRequest<Business> = Business.fetchRequest()
+
+        let categoryFR: NSFetchRequest<NSFetchRequestResult> = Category.fetchRequest()
+        let deleteCategoryReq = NSBatchDeleteRequest(fetchRequest: categoryFR)
+
+        let locationFR: NSFetchRequest<NSFetchRequestResult> = Location.fetchRequest()
+        let deleteLocationReq = NSBatchDeleteRequest(fetchRequest: locationFR)
+
+        do {
+            let businesses = try context.fetch(businessFR)
+
+            for business in businesses {
+                business.name = nil
+                business.imageUrl = nil
+                business.isClosed = false
+                business.phone = nil
+                business.reviewCount = 0
+                business.yelpUrl = nil
+                business.preferredCategory = nil
+                business.yelpRating = 0
+                business.category = []
+                business.location = nil
+            }
+
+            save()
+
+            if let persistentStoreCoordinator = context.persistentStoreCoordinator {
+                try persistentStoreCoordinator.execute(deleteCategoryReq, with: context)
+                try persistentStoreCoordinator.execute(deleteLocationReq, with: context)
+            }
+        } catch {
+            #if DEBUG
+                print("There was an error removing the proprietary data: \(error)")
+            #endif
+        }
     }
 }
 

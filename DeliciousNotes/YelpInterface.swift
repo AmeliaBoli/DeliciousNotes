@@ -130,9 +130,3 @@ class YelpInterface {
         }
     }
 }
-
-//        YelpService.sharedInstance.search(byTerm: nil, byCategory: firstTerm!, latitude: 37.7, longitude: -122.3) { success, error in
-//            guard error == nil else {
-//                print(error!.rawValue)
-//                return
-

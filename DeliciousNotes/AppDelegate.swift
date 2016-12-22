@@ -17,12 +17,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let stack = StackSingleton.sharedInstance.stack
     let locationManager = CLLocationManager()
 
-    var existingWishlistDataUpdated = false
-    var existingVisitedDataUpdated = false
+    //var existingWishlistDataUpdated = false
+    //var existingVisitedDataUpdated = false
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-
+        UIView.appearance().tintColor = UIColor(red: 0.3686, green: 0.0863, blue: 0.2353, alpha: 1)
+        stack?.removeProprietaryData()
         stack?.autoSave(delayInSeconds: 30)
         return true
     }
@@ -49,6 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        stack?.removeProprietaryData()
         stack?.save()
     }
 }

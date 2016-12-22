@@ -8,6 +8,11 @@
 
 import Foundation
 
-enum Error: String {
+enum Error {
     case inApp
+    case jsonSerialization
+    case malformedJson
+    case storage
+    case error(String)
 }
+

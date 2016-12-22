@@ -10,13 +10,13 @@ import UIKit
 import CoreLocation
 import CoreData
 
-class SearchViewController: UIViewController {
+class SearchViewController: UIViewController, UITabBarControllerDelegate {
 
     @IBOutlet weak var searchResultsTableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var centerActivityIndicator: UIActivityIndicatorView!
 
     let yelpInterface = YelpInterface.sharedInstance
-    //var locationManager: CLLocationManager?
 
     var autocompleteSuggesions = [[String: Any]]()
     var searchResults = [Business]()
@@ -28,8 +28,8 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
 
         navigationController?.setNavigationBarHidden(true, animated: false)
+        tabBarController?.delegate = self
         
-        //TODO: Fix search bar alignment- setPositionAdjustment did nothing
         let locationManager = (UIApplication.shared.delegate as! AppDelegate).locationManager
         locationManager.delegate = self
         searchResultsTableView.register(UINib(nibName: "RestaurantSummaryCell", bundle: nil),forCellReuseIdentifier: "restaurantCell")
@@ -37,29 +37,40 @@ class SearchViewController: UIViewController {
         searchResultsTableView.estimatedRowHeight = 86
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        searchResultsTableView.reloadData()
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        startLocationServices()
+    }
+
+    func startLocationServices() {
         let locationManager = (UIApplication.shared.delegate as! AppDelegate).locationManager
         let currentAuthorizationStatus = CLLocationManager.authorizationStatus()
+
         if currentAuthorizationStatus == .notDetermined {
             locationManager.requestWhenInUseAuthorization()
         } else if currentAuthorizationStatus == .denied || currentAuthorizationStatus == .restricted {
-            // TODO: Show an alert
+            showLocationServicesAlert()
         } else if currentAuthorizationStatus == .authorizedWhenInUse {
             locationManager.startUpdatingLocation()
         }
     }
 
-    @IBAction func yelpPressed(_ sender: UIButton) {
-        let urlString = "https://www.yelp.com"
-
-        guard let url = URL(string: urlString) else {
-            return
-        }
-
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    func showLocationServicesAlert() {
+        let alert = UIAlertController(title: "Location Permissions", message: "This app requires location services to be enabled. Please check your settings in the Settings App if you would like to continue.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if viewController is RestaurantListViewController {
+            viewController.viewWillAppear(true)
+        }
+    }
 }
 
 extension SearchViewController: CLLocationManagerDelegate {
@@ -69,7 +80,7 @@ extension SearchViewController: CLLocationManagerDelegate {
             locationManager.startUpdatingLocation()
         } else if status == .denied || status == .restricted {
             locationManager.stopMonitoringSignificantLocationChanges()
-            // TODO: Show an alert
+            showLocationServicesAlert()
         } else if status == .notDetermined {
             locationManager.requestWhenInUseAuthorization()
         }
@@ -87,9 +98,8 @@ extension SearchViewController: CLLocationManagerDelegate {
     }
 
     private func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        // TODO: Show an alert
         #if DEBUG
-            print("Location manager did fail with error: \(error.rawValue)")
+            print("Location manager did fail with error: \(error)")
         #endif
     }
 }
@@ -117,8 +127,9 @@ extension SearchViewController: UITableViewDataSource {
                 if let firstKey = suggestion.keys.first {
                     switch firstKey {
                     case "term": cell?.textLabel?.text = suggestion["term"] as? String
-                    case "alias", "title":  cell?.textLabel?.text = suggestion["title"] as? String
-                    cell?.textLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+                    case "alias", "title":
+                        cell?.textLabel?.text = suggestion["title"] as? String
+                        cell?.textLabel?.font = UIFont.boldSystemFont(ofSize: 15)
                     case "business": cell?.textLabel?.text = suggestion["business"] as? String
                     default: break
                     }
@@ -132,8 +143,15 @@ extension SearchViewController: UITableViewDataSource {
 
             if let image = restaurantImages[indexPath.row] {
                 cell.restaurantImage.image = image
+                cell.imageLoadingActivityIndicator.stopAnimating()
             } else {
-                cell.restaurantImage.backgroundColor = UIColor.orange
+                cell.restaurantImage.image = #imageLiteral(resourceName: "Thumbnail Placeholder")
+
+                if business.noFoundImage {
+                    cell.imageLoadingActivityIndicator.stopAnimating()
+                } else {
+                    cell.imageLoadingActivityIndicator.startAnimating()
+                }
             }
             return cell
         }
@@ -165,53 +183,59 @@ extension SearchViewController: UITableViewDelegate {
                 #if DEBUG
                     print("There is no location to search for")
                 #endif
-                // TODO: Show an alert
                 return
         }
 
-        switch indexPath.section {
-        case 0: let suggestion = autocompleteSuggesions[indexPath.row]
-        var term: String? = nil
-        var category: String? = nil
-        if suggestion.keys.first == "term" || suggestion.keys.first == "business",
-            let termToSearch = suggestion.values.first as? String {
-            term = termToSearch
-        } else if suggestion.keys.contains("alias"),
-            let categoryToSearch = suggestion["alias"] as? String {
-            category = categoryToSearch
-        }
-        yelpInterface.fetchSearchResults(term: term, category: category, latitude: latitude, longitude: longitude) { businesses, error in
+        if !autocompleteSuggesions.isEmpty {
+            let suggestion = autocompleteSuggesions[indexPath.row]
+            var term: String? = nil
+            var category: String? = nil
 
-            guard let businesses = businesses,
-                error == nil else {
-                    print(error?.rawValue)
-                    return
+            if suggestion.keys.first == "term" || suggestion.keys.first == "business",
+                let termToSearch = suggestion.values.first as? String {
+                term = termToSearch
+            } else if suggestion.keys.contains("alias"),
+                let categoryToSearch = suggestion["alias"] as? String {
+                category = categoryToSearch
             }
 
-            self.searchResults = businesses
-            self.restaurantImages = Array(repeating: nil, count: self.searchResults.count)
+            centerActivityIndicator.startAnimating()
+            yelpInterface.fetchSearchResults(term: term, category: category, latitude: latitude, longitude: longitude) { businesses, error in
 
-            DispatchQueue.global().async {
-            for (index, restaurant) in businesses.enumerated() {
-                let nextImage = restaurant.generateImage()
-                self.restaurantImages[index] = nextImage
+                guard let businesses = businesses,
+                    error == nil else {
+                        print(error)
+                        DispatchQueue.main.async {
+                            self.centerActivityIndicator.stopAnimating()
+                        }
+                        return
+                }
+
+                self.searchResults = businesses
+                self.restaurantImages = Array(repeating: nil, count: self.searchResults.count)
+
+                DispatchQueue.global().async {
+                    for (index, restaurant) in businesses.enumerated() {
+                        if let nextImage = restaurant.generateImage() {
+                            self.restaurantImages[index] = nextImage
+                        } else {
+                            restaurant.noFoundImage = true
+                        }
+                        DispatchQueue.main.async {
+                            self.searchResultsTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
+                        }
+                    }
+                }
+
+                self.autocompleteSuggesions.removeAll()
+
                 DispatchQueue.main.async {
-                    self.searchResultsTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
+                    self.centerActivityIndicator.stopAnimating()
+                    tableView.reloadData()
                 }
             }
-            }
-
-            self.autocompleteSuggesions.removeAll()
-
-            DispatchQueue.main.async {
-                tableView.reloadData()
-            }
-            }
-        default: return
         }
     }
-
-    
 }
 
 extension SearchViewController: UISearchBarDelegate, UIGestureRecognizerDelegate {
@@ -223,21 +247,23 @@ extension SearchViewController: UISearchBarDelegate, UIGestureRecognizerDelegate
                 #if DEBUG
                     print("There is no location to search for")
                 #endif
-                // TODO: Show an alert
                 return
         }
-
+        centerActivityIndicator.startAnimating()
         yelpInterface.fetchAutocompleteSuggesions(searchText: searchText, latitude: latitude, longitude: longitude) { suggestions, error in
             guard let suggestions = suggestions,
                 error == nil else {
                     #if DEBUG
                         print("There was a problem retrieving the suggestions: \(error)")
                     #endif
-                    // TODO: Present info to the user
+                    DispatchQueue.main.async {
+                        self.centerActivityIndicator.stopAnimating()
+                    }
                     return
             }
             self.autocompleteSuggesions = suggestions
             DispatchQueue.main.async {
+                self.centerActivityIndicator.stopAnimating()
                 self.searchResultsTableView.reloadData()
             }
         }
@@ -247,21 +273,21 @@ extension SearchViewController: UISearchBarDelegate, UIGestureRecognizerDelegate
         if !searchResults.isEmpty {
             searchResults.removeAll()
             restaurantImages.removeAll()
-            searchResultsTableView.reloadSections([0], with: .automatic)
+            searchResultsTableView.reloadData()
         }
 
         if !searchText.isEmpty {
             getSuggestions(searchText: searchText)
         }
     }
-
+    
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text,
             !searchText.isEmpty {
             getSuggestions(searchText: searchText)
         }
     }
-
+    
     @IBAction func dismissKeyboardOnTap(sender: UITapGestureRecognizer) {
         view.endEditing(true)
 
@@ -284,6 +310,10 @@ extension SearchViewController: UISearchBarDelegate, UIGestureRecognizerDelegate
     }
 }
 
+protocol SearchTableDelegate {
+    func addPressed(from cell: UITableViewCell)
+}
+
 extension SearchViewController: SearchTableDelegate {
     func addPressed(from cell: UITableViewCell) {
         guard let indexPath = searchResultsTableView.indexPath(for: cell) else {
@@ -291,35 +321,11 @@ extension SearchViewController: SearchTableDelegate {
         }
 
         let business = searchResults[indexPath.row]
-        business.status = Status.wishlist.rawValue
-        StackSingleton.sharedInstance.stack?.save()
-    }
-
-    func yelpPressed(from cell: UITableViewCell) {
-        guard let indexPath = searchResultsTableView.indexPath(for: cell) else {
-            return
+        if let statusString = business.status,
+            let status = Status(rawValue: statusString),
+            status == .search {
+            business.status = Status.wishlist.rawValue
+            StackSingleton.sharedInstance.stack?.save()
         }
-
-        let siteUrl = searchResults[indexPath.row].yelpUrl
-        presentSite(urlString: siteUrl)
-    }
-}
-
-protocol SearchTableDelegate {
-    func addPressed(from cell: UITableViewCell)
-    func yelpPressed(from cell: UITableViewCell)
-    func presentSite(urlString: String?)
-}
-
-extension SearchTableDelegate {
-
-    func presentSite(urlString: String?) {
-        let urlString = urlString ?? "https://www.yelp.com"
-
-        guard let url = URL(string: urlString) else {
-            return
-        }
-
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 }

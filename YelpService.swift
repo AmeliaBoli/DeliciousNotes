@@ -9,52 +9,6 @@
 import Foundation
 import CoreData
 
-struct AutocompleteSuggestion {
-    var terms: [String] = []
-    var categories: [Category] = []
-    var businesses: [BusinessSummary] = []
-
-    var numberOfItems: Int {
-        return terms.count + categories.count + businesses.count
-    }
-
-    var suggestions: [[String: String]] {
-        var suggestions = [[String: String]]()
-
-        for term in terms {
-            suggestions.append(["term": term])
-        }
-
-        for category in categories {
-            if let title = category.title {
-                suggestions.append(["category": title])
-            }
-        }
-
-        for business in businesses {
-            suggestions.append(["business": business.name])
-        }
-        return suggestions
-    }
-}
-
-struct BusinessSummary {
-    var name: String
-    var id: String
-
-    init?(dictionary: [String: String]) {
-        guard let name = dictionary["name"],
-            let id = dictionary["id"] else {
-                #if DEBUG
-                    print("There was something missing for a business summary in: \(dictionary)")
-                #endif
-                return nil
-        }
-        self.name = name
-        self.id = id
-    }
-}
-
 class YelpService: Networking {
 
     // MARK: Singleton
@@ -164,7 +118,7 @@ class YelpService: Networking {
                 let formattedCategories = dictionary["categories"] as? [[String: String]],
                 let formattedBusinesses = dictionary["businesses"] as? [[String: String]] else {
                     // TODO: flush this out more
-                    completionHandlerForAutocomplete(nil, .inApp)
+                    completionHandlerForAutocomplete(nil, .malformedJson)
                     return
             }
 
@@ -212,8 +166,7 @@ class YelpService: Networking {
             guard error == nil,
                 let dictionary = result,
                 let businesses = dictionary["businesses"] as? [[String: Any]] else {
-                    // TODO: flush this out more
-                    completionHandlerForSearch(nil, .inApp)
+                    completionHandlerForSearch(nil, .malformedJson)
                     return
             }
 
@@ -235,15 +188,14 @@ class YelpService: Networking {
         _ = getMethod(parameters: [:], path: Constants.SearchPath, pathExtension: pathExtension) { result, error in
             guard error == nil,
                 let businessDictionary = result else {
-                    // TODO: flush this out more
-                    completionHandlerForGetBusiness(false, .inApp)
+                    completionHandlerForGetBusiness(false, .malformedJson)
                     return
             }
 
             if let _ = self.saveBusiness(dictionary: businessDictionary) {
                 completionHandlerForGetBusiness(true, nil)
             } else {
-                completionHandlerForGetBusiness(false, .inApp)
+                completionHandlerForGetBusiness(false, .storage)
             }
         }
     }
@@ -264,16 +216,18 @@ class YelpService: Networking {
         _ = taskForHTTPMethod(request: request) { result, error in
             guard error == nil,
                 let data = result else {
-                    // TODO: flush this out more
-                    completionHandlerForGet(nil, .inApp)
+                    var completionError = Error.inApp
+                    if let error = error {
+                        completionError = .error(error.localizedDescription)
+                    }
+                    completionHandlerForGet(nil, completionError)
                     return
             }
 
             self.deserializeJSONWithCompletionHandler(data: data) { result, error in
                 guard error == nil,
                     let dictionary = result as? [String: Any] else {
-                        // TODO: Flush this out more
-                        completionHandlerForGet(nil, .inApp)
+                        completionHandlerForGet(nil, .jsonSerialization)
                         return
                 }
                 completionHandlerForGet(dictionary, nil)
@@ -304,8 +258,11 @@ class YelpService: Networking {
         _ = taskForHTTPMethod(request: request) { result, error in
             guard error == nil,
                 let data = result else {
-                    // TODO: flush this out more
-                    completionHandlerForGetToken(false, .inApp)
+                    var completionError = Error.inApp
+                    if let error = error {
+                        completionError = .error(error.localizedDescription)
+                    }
+                    completionHandlerForGetToken(false, completionError)
                     return
             }
 
@@ -314,8 +271,7 @@ class YelpService: Networking {
                     let dictionary = result as? [String: Any],
                     let token = dictionary["access_token"] as? String,
                     let expirationSeconds = dictionary["expires_in"] as? Double else {
-                        // TODO: flush this out more
-                        completionHandlerForGetToken(false, .inApp)
+                        completionHandlerForGetToken(false, .jsonSerialization)
                         return
                 }
 
