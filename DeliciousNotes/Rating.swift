@@ -1,5 +1,5 @@
 //
-//  YelpRating.swift
+//  Rating.swift
 //  DeliciousNotes
 //
 //  Created by Amelia Boli on 12/17/16.

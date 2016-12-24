@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let locationManager = CLLocationManager()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        UIView.appearance().tintColor = UIColor(red: 0.3686, green: 0.0863, blue: 0.2353, alpha: 1)
+        UIView.appearance().tintColor = UIColor(red: 0.81, green: 0.00, blue: 0.33, alpha: 1.0)
         stack?.removeProprietaryData()
         stack?.autoSave(delayInSeconds: 30)
         return true

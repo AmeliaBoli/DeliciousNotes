@@ -60,8 +60,6 @@ class RestaurantListViewController: UIViewController, UITabBarControllerDelegate
         if let numberOfRestaurants = self.restaurantTableView.fetchedResultsController?.fetchedObjects?.count {
             self.restaurantImages = Array(repeating: ["id": nil, "image": nil], count: numberOfRestaurants)
         }
-
-        //fetchBusinessData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -143,7 +141,7 @@ class RestaurantListViewController: UIViewController, UITabBarControllerDelegate
             return
         }
 
-        for (index, restaurant) in businesses.enumerated() {
+        for restaurant in businesses {
             let restaurantId = restaurant.id
             let imageDictionaries = restaurantImages.filter({ ($0["id"] as? String) == restaurantId })
             if imageDictionaries.isEmpty || imageDictionaries.first?["image"] == nil {
@@ -166,11 +164,19 @@ class RestaurantListViewController: UIViewController, UITabBarControllerDelegate
 
                     imageDictionary["image"] = nextImage
 
-                    if index >= self.restaurantImages.count {
-                        self.restaurantImages.append(imageDictionary)
-                    } else {
-                        self.restaurantImages[index] = imageDictionary
-                    }
+                        if let imageIndex = self.restaurantImages.index(where: { dictionary in
+                            if let idFromArray = dictionary["id"] as? String,
+                                idFromArray == restaurantId {
+                                return true
+                            } else {
+                                return false
+                            }
+                        }) {
+                            self.restaurantImages[imageIndex] = imageDictionary
+                        } else {
+                            self.restaurantImages.append(imageDictionary)
+                        }
+
                     DispatchQueue.main.async {
                         if let businessIndex = self.restaurantTableView.fetchedResultsController?.indexPath(forObject: restaurant) {
                             self.restaurantTableView.reloadRows(at: [businessIndex], with: .none)
@@ -290,6 +296,7 @@ extension RestaurantListViewController: UITableViewDataSource {
                     cell.imageLoadingActivityIndicator.stopAnimating()
                 } else {
                     cell.imageLoadingActivityIndicator.startAnimating()
+                    //fetchBusinessImage(business: business)
                 }
             }
 

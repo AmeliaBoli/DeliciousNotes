@@ -199,6 +199,7 @@ extension SearchViewController: UITableViewDelegate {
                 category = categoryToSearch
             }
 
+            autocompleteSuggesions.removeAll()
             centerActivityIndicator.startAnimating()
             yelpInterface.fetchSearchResults(term: term, category: category, latitude: latitude, longitude: longitude) { businesses, error in
 
@@ -217,23 +218,23 @@ extension SearchViewController: UITableViewDelegate {
                 self.restaurantImages = Array(repeating: nil, count: self.searchResults.count)
 
                 DispatchQueue.main.async {
-                    for (index, restaurant) in businesses.enumerated() {
-                        if let nextImage = ImageFetcher.generateImage(imageUrl: restaurant.imageUrl) {
-                            self.restaurantImages[index] = nextImage
-                        } else {
-                            restaurant.noFoundImage = true
-                        }
-                        DispatchQueue.main.async {
-                            self.searchResultsTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
-                        }
-                    }
+                    tableView.reloadData()
+                    self.centerActivityIndicator.stopAnimating()
                 }
 
-                self.autocompleteSuggesions.removeAll()
-
-                DispatchQueue.main.async {
-                    self.centerActivityIndicator.stopAnimating()
-                    tableView.reloadData()
+                for (index, restaurant) in businesses.enumerated() {
+                    DispatchQueue.global(qos: .utility).async {
+                        StackSingleton.sharedInstance.stack?.context.performAndWait {
+                            if let nextImage = ImageFetcher.generateImage(imageUrl: restaurant.imageUrl) {
+                                self.restaurantImages[index] = nextImage
+                            } else {
+                                restaurant.noFoundImage = true
+                            }
+                            DispatchQueue.main.async {
+                                self.searchResultsTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -278,7 +279,6 @@ extension SearchViewController: UISearchBarDelegate, UIGestureRecognizerDelegate
         if !searchResults.isEmpty {
             searchResults.removeAll()
             restaurantImages.removeAll()
-            searchResultsTableView.reloadData()
         }
 
         if !searchText.isEmpty {

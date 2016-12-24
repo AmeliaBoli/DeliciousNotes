@@ -76,20 +76,25 @@ class YelpService: Networking {
                         if firstBusiness.update(dictionary: dictionary, context: self.stack.context) {
                             businessToReturn = firstBusiness
                             completionHandlerForSave(true, nil, businessToReturn) //return businessToReturn
+                            return
                         } else {
                             #if DEBUG
                                 print("There was a problem updating existing business: \(firstBusiness) with properties \(dictionary)")
                             #endif
+                            completionHandlerForSave(false, nil, nil)
+                            return
                         }
                     } else {
                         if let newBusiness = Business(dictionary: dictionary, status: .search, context: self.stack.context) {
                             businessToReturn = newBusiness
                             completionHandlerForSave(true, nil, businessToReturn) //return businessToReturn
+                            return
                         } else {
                             #if DEBUG
                                 print("A business could not be completed with \(dictionary)")
                             #endif
                             completionHandlerForSave(false, nil, nil)
+                            return
                         }
                     }
                 } catch {
@@ -97,6 +102,7 @@ class YelpService: Networking {
                         print("There was a problem fetching businesses for autocomplete: \(error)")
                     #endif
                     completionHandlerForSave(false, error, nil)
+                    return
                 }
             }
         } else {
@@ -104,6 +110,7 @@ class YelpService: Networking {
                 print("There was no id in \(dictionary)")
             #endif
             completionHandlerForSave(false, nil, nil)
+            return
         }
     }
 
