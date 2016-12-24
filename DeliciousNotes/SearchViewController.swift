@@ -216,7 +216,7 @@ extension SearchViewController: UITableViewDelegate {
                 self.searchResults = businesses
                 self.restaurantImages = Array(repeating: nil, count: self.searchResults.count)
 
-                DispatchQueue.global(qos: .background).async {
+                DispatchQueue.main.async {
                     for (index, restaurant) in businesses.enumerated() {
                         if let nextImage = ImageFetcher.generateImage(imageUrl: restaurant.imageUrl) {
                             self.restaurantImages[index] = nextImage

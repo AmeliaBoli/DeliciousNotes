@@ -63,18 +63,19 @@ class YelpService: Networking {
     }
 
     // Helper Methods
-    func saveBusiness(dictionary: [String: Any]) -> Business? {
+    func saveBusiness(dictionary: [String: Any], completionHandlerForSave: @escaping ( _ success: Bool, _ error: Error?, _ business: Business?) -> Void) {
         if let id = dictionary["id"] {
             let businessFetch: NSFetchRequest<Business> = Business.fetchRequest()
             businessFetch.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
 
             var businessToReturn: Business? = nil
-        //    stack.context.perform {
+            stack.context.perform {
                 do {
                     let existingBusinesses = try self.stack.context.fetch(businessFetch)
                     if let firstBusiness = existingBusinesses.first {
                         if firstBusiness.update(dictionary: dictionary, context: self.stack.context) {
                             businessToReturn = firstBusiness
+                            completionHandlerForSave(true, nil, businessToReturn) //return businessToReturn
                         } else {
                             #if DEBUG
                                 print("There was a problem updating existing business: \(firstBusiness) with properties \(dictionary)")
@@ -83,24 +84,26 @@ class YelpService: Networking {
                     } else {
                         if let newBusiness = Business(dictionary: dictionary, status: .search, context: self.stack.context) {
                             businessToReturn = newBusiness
+                            completionHandlerForSave(true, nil, businessToReturn) //return businessToReturn
                         } else {
                             #if DEBUG
                                 print("A business could not be completed with \(dictionary)")
                             #endif
+                            completionHandlerForSave(false, nil, nil)
                         }
                     }
                 } catch {
                     #if DEBUG
                         print("There was a problem fetching businesses for autocomplete: \(error)")
                     #endif
+                    completionHandlerForSave(false, error, nil)
                 }
-          //  }
-            return businessToReturn
+            }
         } else {
             #if DEBUG
                 print("There was no id in \(dictionary)")
             #endif
-            return nil
+            completionHandlerForSave(false, nil, nil)
         }
     }
 
@@ -180,13 +183,20 @@ class YelpService: Networking {
 
             var businessesToReturn = [Business]()
 
-            for business in businesses {
-                if let newBusiness = self.saveBusiness(dictionary: business) {
-                    businessesToReturn.append(newBusiness)
-                }
+            let saveBusinessesDispatchGroup = DispatchGroup()
 
+            for business in businesses {
+                saveBusinessesDispatchGroup.enter()
+                self.saveBusiness(dictionary: business) { success, error, business in
+                    if let business = business {
+                        businessesToReturn.append(business)
+                    }
+                    saveBusinessesDispatchGroup.leave()
+                }
             }
-            completionHandlerForSearch(businessesToReturn, nil)
+            saveBusinessesDispatchGroup.notify(queue: .main) {
+                completionHandlerForSearch(businessesToReturn, nil)
+            }
         }
     }
 
@@ -204,10 +214,14 @@ class YelpService: Networking {
                     return
             }
 
-            if let _ = self.saveBusiness(dictionary: businessDictionary) {
+            self.saveBusiness(dictionary: businessDictionary) { success, error, business in
+                guard success,
+                    error == nil else {
+                        completionHandlerForGetBusiness(false, .storage)
+                        return
+                }
+
                 completionHandlerForGetBusiness(true, nil)
-            } else {
-                completionHandlerForGetBusiness(false, .storage)
             }
         }
     }

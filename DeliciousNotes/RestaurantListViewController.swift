@@ -67,13 +67,14 @@ class RestaurantListViewController: UIViewController, UITabBarControllerDelegate
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+    }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         if let restaurant = restaurantTableView.fetchedResultsController?.fetchedObjects?.first as? Business,
             restaurant.name == nil {
             fetchBusinessData()
-        }
-
-        if restaurantTableView.fetchedResultsController?.fetchedObjects?.count != restaurantImages.count {
+        } else if restaurantTableView.fetchedResultsController?.fetchedObjects?.count != restaurantImages.count || restaurantImagesHasEmptyImages() {
             fetchBusinessImages()
         }
     }
@@ -92,13 +93,28 @@ class RestaurantListViewController: UIViewController, UITabBarControllerDelegate
         }
     }
 
+    func restaurantImagesHasEmptyImages() -> Bool {
+        guard !restaurantImages.isEmpty else {
+            return false
+        }
+
+        if let _ = restaurantImages.first(where: { $0["image"] == nil }) {
+            return true
+        } else {
+            return false
+        }
+    }
+
     func fetchBusinessData() {
         guard let businesses = restaurantTableView.fetchedResultsController?.fetchedObjects as? [Business] else {
             return
         }
 
+        let fetchBusinessDispatchGroup = DispatchGroup()
+
         for business in businesses {
             if let businessId = business.id {
+                fetchBusinessDispatchGroup.enter()
                 yelpInterface.fetchBusiness(businessId: businessId) { success, error in
                     guard success,
                         error == nil else {
@@ -112,12 +128,14 @@ class RestaurantListViewController: UIViewController, UITabBarControllerDelegate
                             }
                             return
                     }
-                  //  DispatchQueue.global(qos: .background).async {
-                    self.fetchBusinessImages()
-                //    }
+                    fetchBusinessDispatchGroup.leave()
                 }
             }
         }
+                fetchBusinessDispatchGroup.notify(queue: .main) {
+                    self.fetchBusinessImages()
+        }
+
     }
 
     func fetchBusinessImages() {
@@ -126,38 +144,42 @@ class RestaurantListViewController: UIViewController, UITabBarControllerDelegate
         }
 
         for (index, restaurant) in businesses.enumerated() {
-            var businessToRead: Business? = nil
+            let restaurantId = restaurant.id
+            let imageDictionaries = restaurantImages.filter({ ($0["id"] as? String) == restaurantId })
+            if imageDictionaries.isEmpty || imageDictionaries.first?["image"] == nil {
 
-            restaurantTableView.fetchedResultsController?.managedObjectContext.perform {
-                businessToRead = restaurant
-            }
+                var imageDictionary: [String: Any?] = ["id": restaurantId]
 
-            guard let business = businessToRead else {
-                return
-            }
+                DispatchQueue.global(qos: .utility).async {
+                    self.restaurantTableView.fetchedResultsController?.managedObjectContext.performAndWait {
+                    let image = ImageFetcher.generateImage(imageUrl: restaurant.imageUrl)
 
-     //       DispatchQueue.global(qos: .background).async {
-                let image = ImageFetcher.generateImage(imageUrl: business.yelpUrl)
+                    guard let nextImage = image else {
+                        restaurant.noFoundImage = true
+                        DispatchQueue.main.async {
+                            if let businessIndex = self.restaurantTableView.fetchedResultsController?.indexPath(forObject: restaurant) {
+                                self.restaurantTableView.reloadRows(at: [businessIndex], with: .none)
+                            }
+                        }
+                        return
+                    }
 
-                guard let nextImage = image else {
-                    return
-                }
+                    imageDictionary["image"] = nextImage
 
-                if index >= self.restaurantImages.count {
-                    self.restaurantImages.append(["id": business.id, "image": nextImage])
-                } else {
-                    print("Array element: \(self.restaurantImages[index])")
-                    print("Restaurant: \(business)")
-                    self.restaurantImages[index]["id"] = business.id
-                    self.restaurantImages[index]["image"] = nextImage
-                }
-                DispatchQueue.main.async {
-                    if let businessIndex = self.restaurantTableView.fetchedResultsController?.indexPath(forObject: business) {
-                        self.restaurantTableView.reloadRows(at: [businessIndex], with: .none)
+                    if index >= self.restaurantImages.count {
+                        self.restaurantImages.append(imageDictionary)
+                    } else {
+                        self.restaurantImages[index] = imageDictionary
+                    }
+                    DispatchQueue.main.async {
+                        if let businessIndex = self.restaurantTableView.fetchedResultsController?.indexPath(forObject: restaurant) {
+                            self.restaurantTableView.reloadRows(at: [businessIndex], with: .none)
+                        }
                     }
                 }
+                }
             }
-    //}
+        }
     }
 
     @IBAction func filterChanged(_ sender: UISegmentedControl) {
