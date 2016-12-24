@@ -150,19 +150,19 @@ class RestaurantListViewController: UIViewController, UITabBarControllerDelegate
 
                 DispatchQueue.global(qos: .utility).async {
                     self.restaurantTableView.fetchedResultsController?.managedObjectContext.performAndWait {
-                    let image = ImageFetcher.generateImage(imageUrl: restaurant.imageUrl)
+                        let image = ImageFetcher.generateImage(imageUrl: restaurant.imageUrl)
 
-                    guard let nextImage = image else {
-                        restaurant.noFoundImage = true
-                        DispatchQueue.main.async {
-                            if let businessIndex = self.restaurantTableView.fetchedResultsController?.indexPath(forObject: restaurant) {
-                                self.restaurantTableView.reloadRows(at: [businessIndex], with: .none)
+                        guard let nextImage = image else {
+                            restaurant.noFoundImage = true
+                            DispatchQueue.main.async {
+                                if let businessIndex = self.restaurantTableView.fetchedResultsController?.indexPath(forObject: restaurant) {
+                                    self.restaurantTableView.reloadRows(at: [businessIndex], with: .none)
+                                }
                             }
+                            return
                         }
-                        return
-                    }
 
-                    imageDictionary["image"] = nextImage
+                        imageDictionary["image"] = nextImage
 
                         if let imageIndex = self.restaurantImages.index(where: { dictionary in
                             if let idFromArray = dictionary["id"] as? String,
@@ -177,12 +177,12 @@ class RestaurantListViewController: UIViewController, UITabBarControllerDelegate
                             self.restaurantImages.append(imageDictionary)
                         }
 
-                    DispatchQueue.main.async {
-                        if let businessIndex = self.restaurantTableView.fetchedResultsController?.indexPath(forObject: restaurant) {
-                            self.restaurantTableView.reloadRows(at: [businessIndex], with: .none)
+                        DispatchQueue.main.async {
+                            if let businessIndex = self.restaurantTableView.fetchedResultsController?.indexPath(forObject: restaurant) {
+                                self.restaurantTableView.reloadRows(at: [businessIndex], with: .none)
+                            }
                         }
                     }
-                }
                 }
             }
         }
