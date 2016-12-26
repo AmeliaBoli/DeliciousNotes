@@ -19,7 +19,7 @@ class SearchViewController: UIViewController, UITabBarControllerDelegate, AlertD
     let yelpInterface = YelpInterface.sharedInstance
 
     var autocompleteSuggesions = [[String: Any]]()
-    var searchResults = [Business]()
+    var searchResults = [TemporaryBusiness]()
     var restaurantImages = [UIImage?]()
 
     var currentLocation: CLLocation?
@@ -139,7 +139,7 @@ extension SearchViewController: UITableViewDataSource {
         } else {
             let business = searchResults[indexPath.row]
             let cell = tableView.dequeueReusableCell(withIdentifier: "restaurantCell") as! RestaurantSummaryTableViewCell
-            cell.configureProperties(business: business, delegate: self, from: self)
+            cell.configureProperties(temporaryBusiness: business, delegate: self, from: self)
 
             if let image = restaurantImages[indexPath.row] {
                 cell.restaurantImage.image = image
@@ -222,7 +222,7 @@ extension SearchViewController: UITableViewDelegate {
                     self.centerActivityIndicator.stopAnimating()
                 }
 
-                for (index, restaurant) in businesses.enumerated() {
+                for (index, var restaurant) in businesses.enumerated() {
                     DispatchQueue.global(qos: .utility).async {
                         StackSingleton.sharedInstance.stack?.context.performAndWait {
                             if let nextImage = ImageFetcher.generateImage(imageUrl: restaurant.imageUrl) {
@@ -326,7 +326,17 @@ extension SearchViewController: SearchTableDelegate {
         }
 
         let business = searchResults[indexPath.row]
-        if let statusString = business.status,
+        if let status = business.status {
+            var statusToUse: Status
+            if status is Status {
+                statusToUse = status
+            } else {
+                if let statusCase = Status(rawValue: status) {
+                    statusToUse = 
+                }
+            }
+
+            if status
             let status = Status(rawValue: statusString),
             status == .search {
             business.status = Status.wishlist.rawValue

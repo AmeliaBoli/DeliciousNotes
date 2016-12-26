@@ -17,8 +17,12 @@ enum Status: String {
 
 extension Business {
     // Init
-    convenience init?(dictionary: [String: Any], status: Status, context: NSManagedObjectContext) {
-        self.init(context: context)
+    convenience init?(dictionary: [String: Any], status: Status, context: NSManagedObjectContext?) {
+        if let context = context {
+            self.init(context: context)
+        } else {
+            self.init()
+        }
 
         guard let id = dictionary["id"] as? String,
             let name = dictionary["name"] as? String,

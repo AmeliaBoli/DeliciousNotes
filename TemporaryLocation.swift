@@ -1,22 +1,22 @@
 //
-//  Location.swift
+//  TemporaryLocation.swift
 //  DeliciousNotes
 //
-//  Created by Amelia Boli on 11/25/16.
+//  Created by Amelia Boli on 12/26/16.
 //  Copyright © 2016 Appogenic. All rights reserved.
 //
 
 import Foundation
-import CoreData
 
-extension Location {
-    convenience init?(dictionary: [String: Any], context: NSManagedObjectContext?) {
-        if let context = context {
-            self.init(context: context)
-        } else {
-            self.init()
-        }
+struct TemporaryLocation {
+    var address1: String?
+    var address2: String?
+    var address3: String?
+    var city: String?
+    var state: String?
+    var zipCode: String?
 
+    init?(dictionary: [String: Any]) {
         guard let address1 = dictionary["address1"] as? String,
             let city = dictionary["city"] as? String,
             let state = dictionary["state"] as? String,

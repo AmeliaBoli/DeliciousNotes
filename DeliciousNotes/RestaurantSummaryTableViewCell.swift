@@ -99,6 +99,33 @@ class RestaurantSummaryTableViewCell: UITableViewCell {
         wholeCellActivityIndicator.startAnimating()
     }
 
+    func configureProperties(temporaryBusiness: TemporaryBusiness, delegate:SearchTableDelegate?, from viewController: UIViewController) {
+        self.delegate = delegate
+        self.categoriesLabel.text = temporaryBusiness.categories
+        self.restaurantName.text = temporaryBusiness.name
+
+        var addButtonImage = UIImage()
+
+        if let addToWishlistImage = UIImage(named: "add to wishlist") {
+            addButtonImage = addToWishlistImage.withRenderingMode(.alwaysTemplate)
+            addButton.setImage(addButtonImage, for: .normal)
+        }
+
+        addButton.tintColor = UIView.appearance().tintColor
+
+        var restaurantRatingImages = Rating.ratingImages(rating: temporaryBusiness.yelpRating, isUserRating: false, isLargeIcons: false)
+        numberOfReviewsLabel.isHidden = false
+        self.numberOfReviewsLabel.text = "\(temporaryBusiness.reviewCount) Reviews"
+
+        firstRatingIcon.image = restaurantRatingImages[0]
+        secondRatingIcon.image = restaurantRatingImages[1]
+        thirdRatingIcon.image = restaurantRatingImages[2]
+        fourthRatingIcon.image = restaurantRatingImages[3]
+        fifthRatingIcon.image = restaurantRatingImages[4]
+
+        self.selectionStyle = .none
+    }
+
     @IBAction func addPressed(_ sender: UIButton) {
         addButton.tintColor = .lightGray
         delegate?.addPressed(from: self)

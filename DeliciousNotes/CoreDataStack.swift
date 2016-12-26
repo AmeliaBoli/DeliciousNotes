@@ -27,9 +27,9 @@ struct CoreDataStack {
     fileprivate let persistingContext: NSManagedObjectContext
     fileprivate let backgroundContext: NSManagedObjectContext
     let context: NSManagedObjectContext
+    var inMemoryStore: NSPersistentStore?
 
     // MARK: Initializers
-
     init?(modelName: String) {
 
         // Assumes the model is in the main bundle
@@ -133,6 +133,8 @@ extension CoreDataStack  {
             if let persistentStoreCoordinator = context.persistentStoreCoordinator {
                 try persistentStoreCoordinator.execute(deleteCategoryReq, with: context)
                 try persistentStoreCoordinator.execute(deleteLocationReq, with: context)
+
+                context.reset()
             }
         } catch {
             #if DEBUG

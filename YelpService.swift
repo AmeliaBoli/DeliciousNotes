@@ -63,7 +63,7 @@ class YelpService: Networking {
     }
 
     // Helper Methods
-    func saveBusiness(dictionary: [String: Any], completionHandlerForSave: @escaping ( _ success: Bool, _ error: Error?, _ business: Business?) -> Void) {
+    func saveBusiness(dictionary: [String: Any], forSaving: Bool, completionHandlerForSave: @escaping ( _ success: Bool, _ error: Error?, _ business: Business?) -> Void) {
         if let id = dictionary["id"] {
             let businessFetch: NSFetchRequest<Business> = Business.fetchRequest()
             businessFetch.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
@@ -75,7 +75,7 @@ class YelpService: Networking {
                     if let firstBusiness = existingBusinesses.first {
                         if firstBusiness.update(dictionary: dictionary, context: self.stack.context) {
                             businessToReturn = firstBusiness
-                            completionHandlerForSave(true, nil, businessToReturn) //return businessToReturn
+                            completionHandlerForSave(true, nil, businessToReturn)
                             return
                         } else {
                             #if DEBUG
@@ -85,9 +85,10 @@ class YelpService: Networking {
                             return
                         }
                     } else {
-                        if let newBusiness = Business(dictionary: dictionary, status: .search, context: self.stack.context) {
+                        let context = forSaving ? self.stack.context : nil
+                        if let newBusiness = Business(dictionary: dictionary, status: .search, context: context) {
                             businessToReturn = newBusiness
-                            completionHandlerForSave(true, nil, businessToReturn) //return businessToReturn
+                            completionHandlerForSave(true, nil, businessToReturn)
                             return
                         } else {
                             #if DEBUG
@@ -165,7 +166,7 @@ class YelpService: Networking {
         }
     }
 
-    func search(byTerm term: String?, byCategory category: String?, latitude: Double, longitude: Double, completionHandlerForSearch: @escaping (_ businesses: [Business]?, _ error: ErrorType?) -> Void) {
+    func search(byTerm term: String?, byCategory category: String?, latitude: Double, longitude: Double, completionHandlerForSearch: @escaping (_ businesses: [TemporaryBusiness]?, _ error: ErrorType?) -> Void) {
 
         var parameters: [String: Any] = [ParameterKeys.Latitude: latitude,
                                          ParameterKeys.Longitude: longitude]
@@ -188,22 +189,16 @@ class YelpService: Networking {
                     return
             }
 
-            var businessesToReturn = [Business]()
+            var businessesToReturn = [TemporaryBusiness]()
 
             let saveBusinessesDispatchGroup = DispatchGroup()
 
             for business in businesses {
-                saveBusinessesDispatchGroup.enter()
-                self.saveBusiness(dictionary: business) { success, error, business in
-                    if let business = business {
-                        businessesToReturn.append(business)
-                    }
-                    saveBusinessesDispatchGroup.leave()
+                if let newBusiness = TemporaryBusiness(dictionary: business) {
+                    businessesToReturn.append(newBusiness)
                 }
             }
-            saveBusinessesDispatchGroup.notify(queue: .main) {
-                completionHandlerForSearch(businessesToReturn, nil)
-            }
+            completionHandlerForSearch(businessesToReturn, nil)
         }
     }
 
@@ -221,7 +216,7 @@ class YelpService: Networking {
                     return
             }
 
-            self.saveBusiness(dictionary: businessDictionary) { success, error, business in
+            self.saveBusiness(dictionary: businessDictionary, forSaving: true) { success, error, business in
                 guard success,
                     error == nil else {
                         completionHandlerForGetBusiness(false, .storage)

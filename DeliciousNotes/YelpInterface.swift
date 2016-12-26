@@ -54,7 +54,7 @@ class YelpInterface {
         }
     }
 
-    func fetchSearchResults(term: String?, category: String?, latitude: Double, longitude: Double, completionHandlerForAutocomplete: @escaping (_ businesses: [Business]?, _ error: ErrorType?) -> Void) {
+    func fetchSearchResults(term: String?, category: String?, latitude: Double, longitude: Double, completionHandlerForAutocomplete: @escaping (_ businesses: [TemporaryBusiness]?, _ error: ErrorType?) -> Void) {
         if token.isValid() {
             yelpService.search(byTerm: term, byCategory: category, latitude: latitude, longitude: longitude) { result, error in
                 guard error == nil,

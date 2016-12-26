@@ -28,6 +28,9 @@
 		AE9FE6BB1DE8C41D00A74DD8 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6BA1DE8C41D00A74DD8 /* Location.swift */; };
 		AE9FE6BD1DE8D09F00A74DD8 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6BC1DE8D09F00A74DD8 /* Category.swift */; };
 		AE9FE6BF1DE8D15D00A74DD8 /* Business.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9FE6BE1DE8D15D00A74DD8 /* Business.swift */; };
+		AEA538731E11B6D1005AB133 /* TemporaryBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA538721E11B6D1005AB133 /* TemporaryBusiness.swift */; };
+		AEA538751E11B85D005AB133 /* TemporaryLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA538741E11B85D005AB133 /* TemporaryLocation.swift */; };
+		AEA538771E11B951005AB133 /* TemporaryCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA538761E11B951005AB133 /* TemporaryCategory.swift */; };
 		AEA5E15B1E076CD500D86049 /* Sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA5E15A1E076CD500D86049 /* Sort.swift */; };
 		AEA5E15F1E0AD04F00D86049 /* WishlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA5E15E1E0AD04F00D86049 /* WishlistViewController.swift */; };
 		AEA5E1611E0AD1CA00D86049 /* VisitedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA5E1601E0AD1CA00D86049 /* VisitedViewController.swift */; };
@@ -62,6 +65,9 @@
 		AE9FE6BA1DE8C41D00A74DD8 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		AE9FE6BC1DE8D09F00A74DD8 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		AE9FE6BE1DE8D15D00A74DD8 /* Business.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Business.swift; sourceTree = "<group>"; };
+		AEA538721E11B6D1005AB133 /* TemporaryBusiness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryBusiness.swift; sourceTree = "<group>"; };
+		AEA538741E11B85D005AB133 /* TemporaryLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TemporaryLocation.swift; path = ../TemporaryLocation.swift; sourceTree = "<group>"; };
+		AEA538761E11B951005AB133 /* TemporaryCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryCategory.swift; sourceTree = "<group>"; };
 		AEA5E15A1E076CD500D86049 /* Sort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sort.swift; sourceTree = "<group>"; };
 		AEA5E15E1E0AD04F00D86049 /* WishlistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WishlistViewController.swift; sourceTree = "<group>"; };
 		AEA5E1601E0AD1CA00D86049 /* VisitedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisitedViewController.swift; sourceTree = "<group>"; };
@@ -92,6 +98,9 @@
 				AE9FE6BC1DE8D09F00A74DD8 /* Category.swift */,
 				AE24476F1DEA2A05001561F7 /* YelpCategory.swift */,
 				AE9FE6B51DE8BB4A00A74DD8 /* CoreDataStack.swift */,
+				AEA538721E11B6D1005AB133 /* TemporaryBusiness.swift */,
+				AEA538741E11B85D005AB133 /* TemporaryLocation.swift */,
+				AEA538761E11B951005AB133 /* TemporaryCategory.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -281,6 +290,7 @@
 				AE24475B1DE9F71F001561F7 /* SearchViewController.swift in Sources */,
 				AE9FE6AD1DE25EBE00A74DD8 /* YelpService.swift in Sources */,
 				AEF08D091DFC6A58008A5F5B /* CoreDataTableViewController.swift in Sources */,
+				AEA538771E11B951005AB133 /* TemporaryCategory.swift in Sources */,
 				AE9A790B1E05D89D00E9E4A5 /* Rating.swift in Sources */,
 				AE24476E1DEA08A4001561F7 /* YelpInterface.swift in Sources */,
 				AE9FE6B21DE26FA900A74DD8 /* ErrorEnum.swift in Sources */,
@@ -289,7 +299,9 @@
 				AECE3C081E0B77B4002CA0E4 /* ImageHelper.swift in Sources */,
 				AE9FE6B61DE8BB4A00A74DD8 /* CoreDataStack.swift in Sources */,
 				AEA5E1611E0AD1CA00D86049 /* VisitedViewController.swift in Sources */,
+				AEA538731E11B6D1005AB133 /* TemporaryBusiness.swift in Sources */,
 				AE9FE6BD1DE8D09F00A74DD8 /* Category.swift in Sources */,
+				AEA538751E11B85D005AB133 /* TemporaryLocation.swift in Sources */,
 				AEA5E15F1E0AD04F00D86049 /* WishlistViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

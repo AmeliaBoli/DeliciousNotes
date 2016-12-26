@@ -1,22 +1,18 @@
 //
-//  Category.swift
+//  TemporaryCategory.swift
 //  DeliciousNotes
 //
-//  Created by Amelia Boli on 11/25/16.
+//  Created by Amelia Boli on 12/26/16.
 //  Copyright © 2016 Appogenic. All rights reserved.
 //
 
 import Foundation
-import CoreData
 
-extension Category {
-    convenience init?(dictionary: [String: String], context: NSManagedObjectContext?) {
-        if let context = context {
-            self.init(context: context)
-        } else {
-            self.init()
-        }
+struct TemporaryCategory {
+    var alias: String?
+    var title: String?
 
+    init?(dictionary: [String: String]) {
         guard let alias = dictionary["alias"],
             let title = dictionary["title"],
             let _ = YelpCategory(rawValue: title) else {
@@ -25,7 +21,7 @@ extension Category {
                 #endif
                 return nil
         }
-            self.alias = alias
-            self.title = title
+        self.alias = alias
+        self.title = title
     }
 }
