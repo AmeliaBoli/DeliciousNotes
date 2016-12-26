@@ -326,11 +326,14 @@ extension SearchViewController: SearchTableDelegate {
         }
 
         let business = searchResults[indexPath.row]
+
         if let statusString = business.status,
             let status = Status(rawValue: statusString),
-            status == .search {
+            status == .search,
+            let stack =  StackSingleton.sharedInstance.stack {
+            _ = Business(business: business, status: .wishlist, context: stack.context)
+            stack.save()
             business.status = Status.wishlist.rawValue
-            StackSingleton.sharedInstance.stack?.save()
         }
     }
 }

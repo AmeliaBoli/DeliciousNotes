@@ -296,7 +296,6 @@ extension RestaurantListViewController: UITableViewDataSource {
                     cell.imageLoadingActivityIndicator.stopAnimating()
                 } else {
                     cell.imageLoadingActivityIndicator.startAnimating()
-                    //fetchBusinessImage(business: business)
                 }
             }
 

@@ -76,6 +76,39 @@ extension Business {
         self.addToCategory(categoriesToSave as NSSet)
     }
 
+    convenience init(business: Business, status: Status, context: NSManagedObjectContext) {
+        self.init(context: context)
+        self.id = business.id
+        self.name = business.name
+        self.status = status.rawValue
+        self.yelpRating = business.yelpRating
+        self.isClosed = business.isClosed
+        self.reviewCount = business.reviewCount
+        self.yelpUrl = business.yelpUrl
+        self.imageUrl = business.imageUrl
+        self.phone = business.phone
+        self.preferredCategory = business.preferredCategory
+        self.noFoundImage = business.noFoundImage
+        self.userRating = business.userRating
+        self.userRatingWasSet = business.userRatingWasSet
+
+        if let location = business.location {
+            self.location = Location(location: location, context: context)
+        }
+
+        var categoriesToSave = Set<Category>()
+
+        if let categories = business.category {
+            for categoryElement in categories {
+                if let category = categoryElement as? Category {
+                    let copiedCategory = Category(category: category, context: context)
+                    categoriesToSave.insert(copiedCategory)
+                }
+            }
+            self.addToCategory(categoriesToSave as NSSet)
+        }
+    }
+
     // Creates a string of all associated categories in a comma separated list
     var categories: String {
         var categoriesString = ""

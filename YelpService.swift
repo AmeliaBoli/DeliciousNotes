@@ -63,7 +63,7 @@ class YelpService: Networking {
     }
 
     // Helper Methods
-    func saveBusiness(dictionary: [String: Any], completionHandlerForSave: @escaping ( _ success: Bool, _ error: Error?, _ business: Business?) -> Void) {
+    func saveBusiness(dictionary: [String: Any], context: NSManagedObjectContext, completionHandlerForSave: @escaping ( _ success: Bool, _ error: Error?, _ business: Business?) -> Void) {
         if let id = dictionary["id"] {
             let businessFetch: NSFetchRequest<Business> = Business.fetchRequest()
             businessFetch.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
@@ -75,7 +75,7 @@ class YelpService: Networking {
                     if let firstBusiness = existingBusinesses.first {
                         if firstBusiness.update(dictionary: dictionary, context: self.stack.context) {
                             businessToReturn = firstBusiness
-                            completionHandlerForSave(true, nil, businessToReturn) //return businessToReturn
+                            completionHandlerForSave(true, nil, businessToReturn)
                             return
                         } else {
                             #if DEBUG
@@ -85,9 +85,9 @@ class YelpService: Networking {
                             return
                         }
                     } else {
-                        if let newBusiness = Business(dictionary: dictionary, status: .search, context: self.stack.context) {
+                        if let newBusiness = Business(dictionary: dictionary, status: .search, context: context) {
                             businessToReturn = newBusiness
-                            completionHandlerForSave(true, nil, businessToReturn) //return businessToReturn
+                            completionHandlerForSave(true, nil, businessToReturn)
                             return
                         } else {
                             #if DEBUG
@@ -194,7 +194,7 @@ class YelpService: Networking {
 
             for business in businesses {
                 saveBusinessesDispatchGroup.enter()
-                self.saveBusiness(dictionary: business) { success, error, business in
+                self.saveBusiness(dictionary: business, context: self.stack.nonSavingContext) { success, error, business in
                     if let business = business {
                         businessesToReturn.append(business)
                     }
@@ -221,7 +221,7 @@ class YelpService: Networking {
                     return
             }
 
-            self.saveBusiness(dictionary: businessDictionary) { success, error, business in
+            self.saveBusiness(dictionary: businessDictionary, context: self.stack.context) { success, error, business in
                 guard success,
                     error == nil else {
                         completionHandlerForGetBusiness(false, .storage)

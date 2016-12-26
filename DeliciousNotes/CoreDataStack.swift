@@ -27,6 +27,7 @@ struct CoreDataStack {
     fileprivate let persistingContext: NSManagedObjectContext
     fileprivate let backgroundContext: NSManagedObjectContext
     let context: NSManagedObjectContext
+    let nonSavingContext: NSManagedObjectContext
 
     // MARK: Initializers
 
@@ -62,6 +63,10 @@ struct CoreDataStack {
         // Create a background context child of main context
         backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         backgroundContext.parent = context
+
+        // Create a context that never gets saved
+        nonSavingContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        nonSavingContext.persistentStoreCoordinator = coordinator
 
         // Add a SQLite store located in the documents folder
         let fm = FileManager.default

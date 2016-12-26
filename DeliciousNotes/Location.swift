@@ -39,4 +39,15 @@ extension Location {
             self.address3 = ""
         }
     }
+
+    convenience init?(location: Location, context: NSManagedObjectContext) {
+        self.init(context: context)
+
+        self.address1 = location.address1
+        self.address2 = location.address2
+        self.address3 = location.address3
+        self.city = location.city
+        self.state = location.state
+        self.zipCode = location.zipCode
+    }
 }

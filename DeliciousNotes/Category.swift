@@ -23,4 +23,11 @@ extension Category {
             self.alias = alias
             self.title = title
     }
+
+    convenience init(category: Category, context: NSManagedObjectContext) {
+        self.init(context: context)
+
+        self.alias = category.alias
+        self.title = category.title
+    }
 }
