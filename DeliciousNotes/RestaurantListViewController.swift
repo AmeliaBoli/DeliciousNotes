@@ -13,6 +13,7 @@ class RestaurantListViewController: UIViewController, UITabBarControllerDelegate
 
     @IBOutlet weak var restaurantTableView: CoreDataTableView!
     @IBOutlet weak var sortingSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var editButton: UIBarButtonItem!
 
     let yelpInterface = YelpInterface.sharedInstance
     var stack: CoreDataStack!
@@ -224,6 +225,16 @@ class RestaurantListViewController: UIViewController, UITabBarControllerDelegate
             viewController.viewWillAppear(true)
         }
     }
+
+    @IBAction func editPressed(_ sender: UIBarButtonItem) {
+        if restaurantTableView.isEditing {
+            restaurantTableView.setEditing(false, animated: true)
+            editButton.title = "Edit"
+        } else {
+            restaurantTableView.setEditing(true, animated: true)
+            editButton.title = "Done"
+        }
+    }
 }
 
 extension RestaurantListViewController: UITableViewDataSource {
@@ -303,6 +314,11 @@ extension RestaurantListViewController: UITableViewDataSource {
         return cell
     }
 
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if let restaurantToDelete = restaurantTableView.fetchedResultsController?.object(at: indexPath) as? Business {
+            restaurantTableView.fetchedResultsController?.managedObjectContext.delete(restaurantToDelete)
+        }
+    }
 }
 
 extension RestaurantListViewController: UITableViewDelegate {

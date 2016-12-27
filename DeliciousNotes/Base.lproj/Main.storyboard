@@ -27,7 +27,13 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dAQ-xL-xWd">
                                 <rect key="frame" x="0.0" y="64" width="414" height="44"/>
                                 <items>
-                                    <navigationItem title="Visited" id="jA3-R4-eH8"/>
+                                    <navigationItem title="Visited" id="jA3-R4-eH8">
+                                        <barButtonItem key="rightBarButtonItem" title="Edit" id="2un-3N-Sdk">
+                                            <connections>
+                                                <action selector="editPressed:" destination="BYZ-38-t0r" id="Wet-xs-rse"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
                                 </items>
                             </navigationBar>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="j3c-Di-uBx">
@@ -48,7 +54,7 @@
                                         <rect key="frame" x="0.0" y="28" width="414" height="86"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fyx-ZR-5NG" id="BIt-Fh-lHm">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="86"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="85.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                         <connections>
@@ -90,6 +96,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Visited" image="visited tab crossed cutlery" id="J85-4g-lgY"/>
                     <connections>
+                        <outlet property="editButton" destination="2un-3N-Sdk" id="d9K-4D-49l"/>
                         <outlet property="restaurantTableView" destination="dhh-z5-BQ3" id="gmF-4C-uOb"/>
                         <outlet property="sortingSegmentedControl" destination="j3c-Di-uBx" id="bk8-xd-sAZ"/>
                     </connections>
@@ -379,7 +386,7 @@
                                         <rect key="frame" x="0.0" y="28" width="414" height="86"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DYl-Uq-JEz" id="Tm6-FN-wMR">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="86"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="85.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -387,11 +394,11 @@
                                         <rect key="frame" x="0.0" y="114" width="414" height="86"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Wew-eo-3ZC" id="qjb-QZ-feV">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="85.666666666666671"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="85"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="P7Z-Nh-nfj">
-                                                    <rect key="frame" x="15" y="0.0" width="384" height="85.666666666666671"/>
+                                                    <rect key="frame" x="15" y="0.0" width="384" height="85"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -512,7 +519,13 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nll-LY-6E8">
                                 <rect key="frame" x="0.0" y="64" width="414" height="44"/>
                                 <items>
-                                    <navigationItem title="Wishlist" id="5ZU-h5-o1O"/>
+                                    <navigationItem title="Wishlist" id="5ZU-h5-o1O">
+                                        <barButtonItem key="rightBarButtonItem" title="Edit" id="AUB-eu-WSC">
+                                            <connections>
+                                                <action selector="editPressed:" destination="gg5-Jk-20T" id="hyY-DM-0ug"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
                                 </items>
                             </navigationBar>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="s2O-R3-kkq">
@@ -533,7 +546,7 @@
                                         <rect key="frame" x="0.0" y="28" width="414" height="86"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YGg-DC-u6f" id="LV9-dv-IeK">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="86"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="85.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                         <connections>
@@ -575,6 +588,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" tag="1" title="Wishlist" image="wishlist tab no cutlery" id="dMw-1D-JJc"/>
                     <connections>
+                        <outlet property="editButton" destination="AUB-eu-WSC" id="hYB-9v-gtJ"/>
                         <outlet property="restaurantTableView" destination="xA0-Ii-RRg" id="aff-lI-Nel"/>
                         <outlet property="sortingSegmentedControl" destination="s2O-R3-kkq" id="7J1-lR-2P7"/>
                     </connections>
