@@ -12,6 +12,8 @@ In order to run this app you will need Xcode 8.2. If using a personal iOS device
 1. Open `DeliciousNotes.xcodeproj` in Xcode
 2. Build and run the project on the simulator or on a personal iOS device.
 
+If you built and ran a previous version on this app, you made need to delete the existing app and create a fresh install.
+
 ## Getting Started
 
 ### Search
@@ -20,10 +22,10 @@ In order to run this app you will need Xcode 8.2. If using a personal iOS device
 3. Tap the Wishlist icon on the left to add the restaurant to your Wishlist.
 
 ### Wishlist
-The Wishlist tab shows all restaurants that you have added to your Wishlist. Tap on any restaurant to see details.
+The Wishlist tab shows all restaurants that you have added to your Wishlist. Tap on any restaurant to see details. Press edit to delete any restaurant that you no longer want to save.
 
 ### Visited
-The Visited tab shows all restaurants that you have selected as vivisted. Tap on any restaurant to see details.
+The Visited tab shows all restaurants that you have selected as vivisted. Tap on any restaurant to see details. Press edit to delete any restaurant that you no longer want to save.
 
 ### Details
 Once you tap on a restaurant from the Wishlist or Visited tabs, you will see details about the restaurant. You can interact with the following items.
