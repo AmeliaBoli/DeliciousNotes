@@ -1,3 +1,5 @@
+![DeliciousNotes Logo](/DeliciousNotes/Assets.xcassets/AppIcon.appiconset/AppIcon-40x40@2x.png)
+
 # DeliciousNotes
 An iPhone app to help you keep track of restaurants that you liked and ones that you would like to go to.
 
